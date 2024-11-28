@@ -1,5 +1,5 @@
 import type { Config } from "tailwindcss";
-
+import daisyui from "daisyui"
 export default {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -12,7 +12,15 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      fontFamily: {
+        'sans': ['"Proxima Nova"'],
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    daisyui,
+  ],
+  daisyui: {
+    themes: ["light", "dark", "cmyk", "winter", "lemonade", "coffee", "retro", "lofi"],
+  },
 } satisfies Config;
