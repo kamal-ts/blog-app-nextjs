@@ -12,7 +12,7 @@ export default function Home() {
       <div className="container mt-28">
         <Featured/>
         <CategoryList/>
-        <div className="contents">
+        <div className="md:flex md:gap-8">
           <CardList/>
           <Menu/>
         </div>
