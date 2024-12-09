@@ -7,7 +7,7 @@ const CardList = () => {
   return (
     <div className="sm:flex-[5] mt-12">
       <h1 className="text-xl font-bold mb-6 w-full">Popular Categories </h1>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 mb-6">
         <Card />
         <Card />
         <Card />
@@ -22,7 +22,7 @@ export default CardList;
 
 const Card = () => {
   return (
-    <div className="card sm:card-side bg-base-100 shadow-xl">
+    <div className="card sm:card-side bg-base-100 shadow-sm hover:outline hover:outline-1">
       <figure className="min-h-60 relative flex-[1]">
         <Image src="/food.png" alt="Movie" fill className="object-cover" />
       </figure>
@@ -34,7 +34,7 @@ const Card = () => {
         <Link href={"/"} className="card-title">New movie is released!</Link>
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe earum at dolores doloribus eligendi optio cupiditate natus soluta, ipsa labore!</p>
         <div className="card-actions justify-end">
-          <Link href={"/"} className="btn btn-outline">Read More</Link>
+          <Link href={"/"} className="link">Read More</Link>
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import Avatar from "./Avatar";
 
 const Menu = () => {
   return (
@@ -101,14 +101,7 @@ const CartItem: React.FC<{
   return (
     <Link href={href} className="flex gap-4 items-center mb-4 rounded-lg hover:shadow-lg p-2 transition-all">
       {image && (
-        <div className="w-14 h-14 relative">
-          <Image
-            fill
-            src={image}
-            alt={"image"}
-            className="rounded-full object-cover outline outline-2 outline-offset-1 outline-slate-200"
-          />
-        </div>
+        <Avatar src={image} alt={title}/>
       )}
       <div className="flex-1">
         <div className="badge badge-primary text-[10px] capitalize mb-1">

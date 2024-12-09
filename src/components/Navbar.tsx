@@ -1,7 +1,9 @@
 // import Image from "next/image";
 import React from "react";
 import ThemeToggle from "./ThemeToggle";
+import Link from "next/link";
 const Navbar = () => {
+  const useAuth = true;
 
   return (
     <div className="navbar bg-base-100 absolute left-0 top-0 sm:px-8 md:px-12 lg:px-16 xl:px-28 shadow-lg">
@@ -36,10 +38,6 @@ const Navbar = () => {
             <li>
               <a>About</a>
             </li>
-            {/* <li className="hover:bg-current">
-
-            <ThemeToggle />
-            </li> */}
           </ul>
         </div>
         <a className="btn btn-ghost text-2xl">MrMalo</a>
@@ -55,15 +53,24 @@ const Navbar = () => {
           <li>
             <a>About</a>
           </li>
-          {/* <li className="">
-
-        <ThemeToggle />
-          </li> */}
+          {useAuth && (
+            <li>
+              <a>Write</a>
+            </li>
+          )}
         </ul>
       </div>
       <div className="navbar-end gap-2">
         <ThemeToggle />
-        <a className="btn btn-sm btn-ghost ">Login</a>
+        {useAuth ? (
+          <Link href={"/logout"} className="btn btn-sm btn-ghost ">
+            Logout
+          </Link>
+        ) : (
+          <Link href={"/login"} className="btn btn-sm btn-ghost ">
+            Login
+          </Link>
+        )}
       </div>
     </div>
   );
