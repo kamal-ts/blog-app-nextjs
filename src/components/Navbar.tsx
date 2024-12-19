@@ -38,6 +38,11 @@ const Navbar = () => {
             <li>
               <a>About</a>
             </li>
+            {useAuth && (
+            <li>
+              <Link href={"/write"}>Write</Link>
+            </li>
+          )}
           </ul>
         </div>
         <a className="btn btn-ghost text-2xl">MrMalo</a>
@@ -55,7 +60,7 @@ const Navbar = () => {
           </li>
           {useAuth && (
             <li>
-              <a>Write</a>
+              <Link href={"/write"}>Write</Link>
             </li>
           )}
         </ul>
