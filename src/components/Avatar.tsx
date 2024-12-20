@@ -1,5 +1,4 @@
 import Image from "next/image";
-import React from "react";
 
 const Avatar: React.FC<{ src: string; alt: string }> = ({ src, alt }) => {
   return (

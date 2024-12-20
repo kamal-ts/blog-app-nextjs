@@ -4,7 +4,6 @@ import Layout from "@/components/Layout";
 import Menu from "@/components/Menu";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 
 const SinglePage = () => {
   return (

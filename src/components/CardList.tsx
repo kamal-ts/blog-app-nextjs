@@ -1,4 +1,3 @@
-import React from "react";
 import Pagination from "./Pagination";
 import Image from "next/image";
 import Link from "next/link";

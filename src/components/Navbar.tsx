@@ -1,9 +1,10 @@
-// import Image from "next/image";
-import React from "react";
+"use client"
+import { signOut, useSession } from "next-auth/react";
 import ThemeToggle from "./ThemeToggle";
 import Link from "next/link";
 const Navbar = () => {
-  const useAuth = true;
+  
+  const {status} = useSession();
 
   return (
     <div className="navbar bg-base-100 absolute left-0 top-0 sm:px-8 md:px-12 lg:px-16 xl:px-28 shadow-lg">
@@ -30,7 +31,7 @@ const Navbar = () => {
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
           >
             <li>
-              <a>Homepage</a>
+              <Link href={"/"}>Homepage</Link>
             </li>
             <li>
               <a>Contact</a>
@@ -38,7 +39,7 @@ const Navbar = () => {
             <li>
               <a>About</a>
             </li>
-            {useAuth && (
+            {status === "authenticated" && (
             <li>
               <Link href={"/write"}>Write</Link>
             </li>
@@ -50,7 +51,7 @@ const Navbar = () => {
       <div className="navbar-center hidden lg:flex ">
         <ul className="menu menu-horizontal px-1">
           <li>
-            <a>Homepage</a>
+            <Link href={"/"}>Homepage</Link>
           </li>
           <li>
             <a>Contact</a>
@@ -58,7 +59,7 @@ const Navbar = () => {
           <li>
             <a>About</a>
           </li>
-          {useAuth && (
+          {status === "authenticated" && (
             <li>
               <Link href={"/write"}>Write</Link>
             </li>
@@ -67,10 +68,15 @@ const Navbar = () => {
       </div>
       <div className="navbar-end gap-2">
         <ThemeToggle />
-        {useAuth ? (
-          <Link href={"/logout"} className="btn btn-sm btn-ghost ">
+        {status === "authenticated" ? (
+          <button className="btn btn-sm btn-ghost " 
+          onClick={(e) => {
+            e.preventDefault(); // Tambahkan ini jika ingin mencegah perilaku default
+            signOut();
+          }}
+          >
             Logout
-          </Link>
+          </button>
         ) : (
           <Link href={"/login"} className="btn btn-sm btn-ghost ">
             Login

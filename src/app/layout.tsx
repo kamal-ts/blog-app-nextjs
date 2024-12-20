@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-
+import AuthProvider from "@/providers/AuthProvider";
 
 export const metadata: Metadata = {
   title: "Blog App",
@@ -15,9 +15,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="font-sans">
-        <div className="container max-w-6xl mx-auto px-8 sm:px-12 md:px-16">
-          {children}
-        </div>
+        <AuthProvider>
+          <div className="container max-w-6xl mx-auto px-8 sm:px-12 md:px-16">
+            {children}
+          </div>
+        </AuthProvider>
       </body>
     </html>
   );

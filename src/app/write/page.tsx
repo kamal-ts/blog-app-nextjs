@@ -7,9 +7,30 @@ import dynamic from "next/dynamic";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.bubble.css";
 
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+
 const Write = () => {
+
+  const {status} = useSession();
+
+  const router = useRouter();
+
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
+  
+  
+  if (status==="loading") {
+    return (
+      <div>Loading...</div>
+    )
+  }
+
+  if (status === "unauthenticated") {
+    router.push("/");
+  }
+
+
 
   return (
     <Layout>

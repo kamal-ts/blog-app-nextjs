@@ -2,7 +2,6 @@ import CardList from "@/components/CardList";
 import Footer from "@/components/Footer";
 import Menu from "@/components/Menu";
 import Navbar from "@/components/Navbar";
-import React from "react";
 
 const BlogPage = () => {
   return (
