@@ -5,7 +5,17 @@ import Footer from "@/components/Footer";
 import Menu from "@/components/Menu";
 import Navbar from "@/components/Navbar";
 
-export default function Home() {
+
+interface SearchParams {
+  page?: string;
+}
+
+interface HomeProps {
+  searchParams: SearchParams;
+}
+export const Home: React.FC<HomeProps> = ({ searchParams }) => {
+  const page = parseInt(searchParams.page || "1", 10);
+
   return (
     <div>
       <Navbar/>
@@ -13,7 +23,7 @@ export default function Home() {
         <Featured/>
         <CategoryList/>
         <div className="md:flex md:gap-8">
-          <CardList/>
+          <CardList page={page} />
           <Menu/>
         </div>
       </div>
@@ -21,3 +31,5 @@ export default function Home() {
     </div>
   );
 }
+
+export default Home;
