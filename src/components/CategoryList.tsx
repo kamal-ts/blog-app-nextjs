@@ -1,23 +1,32 @@
-"use client";
 
-import { useCategoryStore } from "@/store/useCategoryStore";
+import { CategoryInterface } from "@/utils/interface";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect } from "react";
 
-const CategoryList = () => {
-  const { categories, getCategory } = useCategoryStore();
+const getData = async () => {
+  const res = await fetch("http://localhost:3000/api/categories", {cache: "no-store"});
+  if (!res.ok) {
+    throw new Error("Failed");
+  }
+  return res.json();
+}
 
-  useEffect(() => {
-    getCategory();
-  }, [getCategory]);
+const CategoryList = async () => {
+
+  const data = await getData();
+  
 
   return (
     <div className="mt-12">
       <h1 className="text-xl font-bold mb-6">Popular Categories </h1>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-        {categories?.map((item) => (
-          <Link href={"/"} className={` btn`} key={item.id}>
+        
+        {data?.map((item: CategoryInterface) => (
+          <Link
+            href={`/blog?cat=${item.slug}`}
+            className={` btn`}
+            key={item.id}
+          >
             <div className="w-8 h-8 relative">
               <Image
                 fill

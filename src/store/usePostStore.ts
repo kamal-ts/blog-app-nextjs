@@ -19,6 +19,7 @@ interface Post {
 interface GetPost {
     page:number; 
     limit: number;
+    category: string
 }
 
 interface PostState {
@@ -33,11 +34,11 @@ export const usePostStore = create<PostState>((set) => ({
     posts: [],
     count: 0,
     isLoadingPost: false,
-    getPost: async ({page, limit}: GetPost) => {
+    getPost: async ({page, limit, category}: GetPost) => {
 
         try {
             set({ isLoadingPost: true });
-            const res = await axios.get(`/api/posts?page=${page}&limit=${limit}`);
+            const res = await axios.get(`/api/posts?page=${page}&limit=${limit}&category=${category}`);
             set({ posts: res.data.posts,
                     count: res.data.count
              });

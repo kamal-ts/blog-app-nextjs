@@ -5,7 +5,6 @@ import Footer from "@/components/Footer";
 import Menu from "@/components/Menu";
 import Navbar from "@/components/Navbar";
 
-
 interface SearchParams {
   page?: string;
 }
@@ -23,11 +22,12 @@ export const Home: React.FC<HomeProps> = ({ searchParams }) => {
         <Featured/>
         <CategoryList/>
         <div className="md:flex md:gap-8">
-          <CardList page={page} />
+          <CardList page={page} category=""/>
           <Menu/>
         </div>
       </div>
       <Footer/>
+      
     </div>
   );
 }

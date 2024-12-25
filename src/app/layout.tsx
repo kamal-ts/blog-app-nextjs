@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import AuthProvider from "@/providers/AuthProvider";
+import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
   title: "Blog App",
@@ -20,6 +21,7 @@ export default function RootLayout({
             {children}
           </div>
         </AuthProvider>
+        <Toaster/>
       </body>
     </html>
   );
