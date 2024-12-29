@@ -22,7 +22,15 @@ export const GET = async (req: NextRequest) => {
           views: "desc"
         },
         take: 5,
-        include: {user: true}
+        include: {
+          user: true,
+          cat: {
+            select: {
+              title: true,
+              color: true
+            }
+          }
+        }
       });
       count = posts.length;
 
@@ -34,6 +42,14 @@ export const GET = async (req: NextRequest) => {
         where: {
           ...(category && { catSlug: category }),
           ...(title && { title: title }),
+        },
+        include: {
+          cat: {
+            select: {
+              title: true,
+              color: true
+            }
+          }
         }
       };
 

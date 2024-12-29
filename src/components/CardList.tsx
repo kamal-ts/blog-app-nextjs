@@ -51,8 +51,15 @@ const CardList: React.FC<SearchParams> = async ({ page, category }) => {
             )}
             <div className="card-body flex-[1]">
               <div>
-                <span className="text-xs">{item.createdAt.substring(0, 10)} - </span>
-                <span className="text-xs text-red-500">{item.catSlug}</span>
+                <span className="text-xs mr-4">
+                  {item.createdAt.substring(0, 10)}
+                </span>
+                <div
+                  style={{ backgroundColor: item.cat.color }}
+                  className="inline-block px-2 py-[3px] rounded-full text-[10px] text-slate-700 capitalize mb-1"
+                >
+                  {item.cat.title}
+                </div>
               </div>
               <Link href={`/posts/${item.slug}`} className="card-title">
                 {item.title}

@@ -8,8 +8,10 @@ export interface PostInterface {
   desc: string;
   views: number;
   catSlug: string;
+  cat: CategoryInterface;
   userEmail: string;
   user?: UserInterface;
+
 }
 
 export interface UserInterface {
@@ -24,6 +26,7 @@ export interface CategoryInterface {
   title: string;
   slug: string;
   img: string;
+  color: string;
 }
 
 export interface CommentInterface {

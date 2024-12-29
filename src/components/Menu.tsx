@@ -1,12 +1,22 @@
 import Link from "next/link";
 import Avatar from "./Avatar";
-import { PostInterface } from "@/utils/interface";
+import { CategoryInterface, PostInterface } from "@/utils/interface";
+import React from "react";
 
 const getData = async () => {
-  const res = await fetch(
-    `http://localhost:3000/api/posts?hot=true`,
-    { cache: "no-store" }
-  );
+  const res = await fetch(`http://localhost:3000/api/posts?hot=true`, {
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    throw new Error("Failed");
+  }
+  return res.json();
+};
+
+const getDataCategories = async () => {
+  const res = await fetch("http://localhost:3000/api/categories", {
+    cache: "no-store",
+  });
   if (!res.ok) {
     throw new Error("Failed");
   }
@@ -14,7 +24,8 @@ const getData = async () => {
 };
 
 const Menu = async () => {
-  const {posts} = await getData();
+  const { posts } = await getData();
+  const categories = await getDataCategories();
 
   return (
     <div className="flex-[2] mt-12">
@@ -22,12 +33,13 @@ const Menu = async () => {
       <h1 className="text-xl font-bold mb-6 w-full">Most Popular</h1>
       {posts.map((item: PostInterface) => (
         <CartItem
-        key={item.id}
-        author={item.user?.name}
-        category={item.catSlug}
-        date={item.createdAt}
-        title={item.title}
-        href="/"
+          key={item.id}
+          author={item.user?.name}
+          category={item.cat.title}
+          color={item.cat.color}
+          date={item.createdAt}
+          title={item.title}
+          href="/"
         />
       ))}
 
@@ -35,12 +47,14 @@ const Menu = async () => {
       <h1 className="text-xl font-bold mb-6 w-full">Categories</h1>
 
       <div className="flex flex-wrap gap-4">
-        <PopularCategory href="/" color="bg-red-100" title="coding" />
-        <PopularCategory href="/" color="bg-yellow-100" title="style" />
-        <PopularCategory href="/" color="bg-green-100" title="fashion" />
-        <PopularCategory href="/" color="bg-orange-100" title="food" />
-        <PopularCategory href="/" color="bg-sky-100" title="travel" />
-        <PopularCategory href="/" color="bg-purple-100" title="culture" />
+        {categories.map((item: CategoryInterface) => (
+          <PopularCategory
+            href={item.slug}
+            key={item.id}
+            color={item.color}
+            title={item.title}
+          />
+        ))}
       </div>
 
       <h2 className="text-sm mt-12">{"Chosen by the editor"}</h2>
@@ -83,8 +97,9 @@ const PopularCategory: React.FC<{
 }> = ({ color, title, href }) => {
   return (
     <Link
-      href={href}
-      className={`py-2 px-5 ${color} rounded-lg text-xs hover:brightness-95 transition-all capitalize`}
+    href={`/blog?cat=${href}`}
+      style={{ backgroundColor: color }}
+      className={`py-2 px-5 rounded-lg text-xs text-slate-700 hover:brightness-95 transition-all capitalize`}
     >
       {title}
     </Link>
@@ -99,20 +114,28 @@ const CartItem: React.FC<{
   category: string;
   author?: string;
   date: string;
-}> = ({ href, title, image, category, author, date }) => {
+}> = ({ href, title, image, category, author, date, color }) => {
   return (
-    <Link href={href} className="flex gap-4 items-center rounded-lg hover:shadow-lg p-2 transition-all">
-      {image && (
-        <Avatar src={image} alt={title}/>
-      )}
+    <Link
+      href={href}
+      className="flex gap-4 items-center rounded-lg hover:shadow-lg p-2 transition-all"
+    >
+      {image && <Avatar src={image} alt={title} />}
       <div className="flex-1">
-        <div className="badge badge-primary text-[10px] capitalize mb-1">
+        <div
+          style={{ backgroundColor: color }}
+          className="inline-block px-2 py-[3px] rounded-full text-[10px] text-slate-700 capitalize mb-1"
+        >
           {category}
         </div>
-        <p className="text-sm">{title}
+        <p className="text-sm">
+          {title}
         </p>
         <span className="capitalize text-[10px] text-primary">{author}</span>
-        <span className="text-[10px] font-light"> - {date.substring(0, 10)}</span>
+        <span className="text-[10px] font-light">
+          {" "}
+          - {date.substring(0, 10)}
+        </span>
       </div>
     </Link>
   );

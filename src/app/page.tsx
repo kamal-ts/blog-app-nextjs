@@ -12,6 +12,7 @@ interface SearchParams {
 interface HomeProps {
   searchParams: SearchParams;
 }
+
 export const Home: React.FC<HomeProps> = ({ searchParams }) => {
   const page = parseInt(searchParams.page || "1", 10);
 
