@@ -42,7 +42,7 @@ const CardList: React.FC<SearchParams> = async ({ page, category }) => {
             {item.img && (
               <figure className="min-h-60 relative flex-[1]">
                 <Image
-                  src={"/p1.jpeg"}
+                  src={item.img}
                   alt="Movie"
                   fill
                   className="object-cover"

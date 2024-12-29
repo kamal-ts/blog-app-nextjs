@@ -25,6 +25,7 @@ const getData = async (slug: string) => {
 const SinglePage: React.FC<HomeProps> = async ({params}) => {
   const {slug} = params 
   const post = await getData(slug);
+  console.log('post', post)
   return (
     <Layout>
       <div className="card sm:card-side bg-base-100 gap-6 rounded-none">
@@ -44,7 +45,7 @@ const SinglePage: React.FC<HomeProps> = async ({params}) => {
 
           <figure className="min-h-60 lg:h-72 relative flex-[1] ">
           <Image
-            src={'/p1.jpeg'}
+            src={post.img}
             alt="Movie"
             fill
             className="object-cover  rounded-lg"

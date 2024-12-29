@@ -7,19 +7,17 @@ import useSWR from "swr";
 import React, { useState } from "react";
 import { CommentInterface } from "@/utils/interface";
 
-
 const fetcher = async (url: string) => {
   const res = await fetch(url);
   const data = await res.json();
   if (!res.ok) {
-    const error = new Error(data.message);
-    throw error;
+    throw new Error(data.message || "Failed to fetch data");
   }
 
   return data;
 };
 
-import toast, { Toaster } from 'react-hot-toast';
+import toast from "react-hot-toast";
 
 const Comments: React.FC<{
   postSlug: string;
@@ -30,12 +28,13 @@ const Comments: React.FC<{
     fetcher
   );
 
+  const [desc, setDesc] = useState("");
+
   if (error) {
     return (
       <p className="text-red-500">Failed to load comments: {error.message}</p>
     );
   }
-  const [desc, setDesc] = useState("");
 
   const handleSubmit = async () => {
     if (!desc.trim()) {
@@ -48,9 +47,11 @@ const Comments: React.FC<{
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ desc, postSlug }),
       });
+      toast.success("Comment submitted successfully!");
       mutate();
       setDesc("");
     } catch (error) {
+      console.log("error", error);
       toast.error("Failed to submit comment");
     }
   };
@@ -75,25 +76,26 @@ const Comments: React.FC<{
           Login to write a comment
         </Link>
       )}
-      <div className="flex flex-col h-96 max-h-96 overflow-y-auto border border-gray-300 rounded-lg p-4 mt-6">
-        {isLoading ? (
-          <Loading />
-        ) : (
-          data?.map((item: CommentInterface) => (
-            <ListCommets
-              comment={item.desc}
-              date={new Date(item.createdAt).toLocaleDateString("id-ID", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-              username={item.user.name}
-              image={item.user.image}
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <div className={`flex flex-col max-h-96 overflow-y-auto border-[0.5px] border-base-300 rounded-lg p-4 mt-6 ${data.length < 1 && "hidden"}`}>
+          {data?.map((item: CommentInterface) => (
+              <ListCommets
               key={item.id}
-            />
-          ))
-        )}
-      </div>
+                comment={item.desc}
+                date={new Date(item.createdAt).toLocaleDateString("id-ID", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+                username={item.user.name}
+                image={item.user.image}
+                
+              />
+            ))}
+        </div>
+      )}
     </div>
   );
 };

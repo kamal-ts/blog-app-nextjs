@@ -1,30 +1,37 @@
 
 export interface PostInterface {
-    id: string;
-    createdAt: string;
-    title: string;
-    slug: string;
-    img: string;
-    desc: string;
-    views: number;
-    catSlug: string;
-    userEmail: string;
+  id: string;
+  createdAt: string;
+  title: string;
+  slug: string;
+  img: string;
+  desc: string;
+  views: number;
+  catSlug: string;
+  userEmail: string;
+  user?: UserInterface;
+}
+
+export interface UserInterface {
+  id: string;
+  name: string;
+  email: string;
+  image: string;
 }
 
 export interface CategoryInterface {
-    id: string;
-    title: string;
-    slug: string;
-    img: string;
+  id: string;
+  title: string;
+  slug: string;
+  img: string;
 }
 
 export interface CommentInterface {
-    id: string;
-    desc: string;
-    createdAt: string;
-    user: {
-      name: string;
-      image: string;
-    };
-  }
-  
+  id: string;
+  desc: string;
+  createdAt: string;
+  user: {
+    name: string;
+    image: string;
+  };
+}

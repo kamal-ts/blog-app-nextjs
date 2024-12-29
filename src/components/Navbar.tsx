@@ -37,7 +37,10 @@ const Navbar = () => {
               <a>Contact</a>
             </li>
             <li>
-              <a>About</a>
+              <Link href={"/corner"}>Corner</Link>
+            </li>
+            <li>
+              <Link href={"/about"}>About</Link>
             </li>
             {status === "authenticated" && (
             <li>
@@ -57,7 +60,10 @@ const Navbar = () => {
             <a>Contact</a>
           </li>
           <li>
-            <a>About</a>
+              <Link href={"/corner"}>Corner</Link>
+            </li>
+          <li>
+            <Link href={"/about"}>About</Link>
           </li>
           {status === "authenticated" && (
             <li>

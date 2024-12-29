@@ -1,32 +1,35 @@
 import Link from "next/link";
 import Avatar from "./Avatar";
+import { PostInterface } from "@/utils/interface";
 
-const Menu = () => {
+const getData = async () => {
+  const res = await fetch(
+    `http://localhost:3000/api/posts?hot=true`,
+    { cache: "no-store" }
+  );
+  if (!res.ok) {
+    throw new Error("Failed");
+  }
+  return res.json();
+};
+
+const Menu = async () => {
+  const {posts} = await getData();
+
   return (
     <div className="flex-[2] mt-12">
       <h2 className="text-sm">{"What's hot"}</h2>
-      <h1 className="text-xl font-bold mb-6 w-full">Popular Categories </h1>
-      <CartItem
-        author="jhon doe"
-        category="travel"
-        date="01.13.2024"
-        title="Lorem ipsum dolor sit amet consectetur adipisicing elit."
+      <h1 className="text-xl font-bold mb-6 w-full">Most Popular</h1>
+      {posts.map((item: PostInterface) => (
+        <CartItem
+        key={item.id}
+        author={item.user?.name}
+        category={item.catSlug}
+        date={item.createdAt}
+        title={item.title}
         href="/"
-      />
-      <CartItem
-        author="jhon doe"
-        category="travel"
-        date="01.13.2024"
-        title="Lorem ipsum dolor sit amet consectetur adipisicing elit."
-        href="/"
-      />
-      <CartItem
-        author="jhon doe"
-        category="travel"
-        date="01.13.2024"
-        title="Lorem ipsum dolor sit amet consectetur adipisicing elit."
-        href="/"
-      />
+        />
+      ))}
 
       <h2 className="text-sm mt-12">{"Discover by topic"}</h2>
       <h1 className="text-xl font-bold mb-6 w-full">Categories</h1>
@@ -94,11 +97,11 @@ const CartItem: React.FC<{
   title: string;
   image?: string;
   category: string;
-  author: string;
+  author?: string;
   date: string;
 }> = ({ href, title, image, category, author, date }) => {
   return (
-    <Link href={href} className="flex gap-4 items-center mb-4 rounded-lg hover:shadow-lg p-2 transition-all">
+    <Link href={href} className="flex gap-4 items-center rounded-lg hover:shadow-lg p-2 transition-all">
       {image && (
         <Avatar src={image} alt={title}/>
       )}
@@ -109,7 +112,7 @@ const CartItem: React.FC<{
         <p className="text-sm">{title}
         </p>
         <span className="capitalize text-[10px] text-primary">{author}</span>
-        <span className="text-[10px] font-light"> - {date}</span>
+        <span className="text-[10px] font-light"> - {date.substring(0, 10)}</span>
       </div>
     </Link>
   );
