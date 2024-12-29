@@ -7,6 +7,7 @@ export const GET = async (req: NextRequest) => {
   const title = searchParams.get("title") || ""; // Pencarian berdasarkan title
   const category = searchParams.get("category") || ""; // Pencarian berdasarkan category
   const hot = searchParams.get("hot") === "true";
+  const isEditorsChoice = searchParams.get("isEditorsChoice") === "true";
   const page = Math.max(parseInt(searchParams.get("page") || "1", 10), 1); // Minimum 1
   const limit = Math.max(parseInt(searchParams.get("limit") || "2", 10), 1); // Minimum 1
   const skip = (page - 1) * limit;
@@ -33,8 +34,27 @@ export const GET = async (req: NextRequest) => {
         }
       });
       count = posts.length;
+      
+    } else if (isEditorsChoice) {
 
-    } else {
+      posts = await prisma.post.findMany({
+        where: {
+          isEditorsChoice: true
+        },
+        take: 5,
+        include: {
+          user: true,
+          cat: {
+            select: {
+              title: true,
+              color: true
+            }
+          }
+        }
+      });
+      count = posts.length;
+      
+    }else {
 
       const query = {
         take: limit,

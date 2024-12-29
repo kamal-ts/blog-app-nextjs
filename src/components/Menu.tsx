@@ -13,6 +13,16 @@ const getData = async () => {
   return res.json();
 };
 
+const getDataByEditorsChoice = async () => {
+  const res = await fetch(`http://localhost:3000/api/posts?isEditorsChoice=true`, {
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    throw new Error("Failed");
+  }
+  return res.json();
+}
+
 const getDataCategories = async () => {
   const res = await fetch("http://localhost:3000/api/categories", {
     cache: "no-store",
@@ -25,6 +35,7 @@ const getDataCategories = async () => {
 
 const Menu = async () => {
   const { posts } = await getData();
+  const dataByEditorsChoice = await getDataByEditorsChoice();
   const categories = await getDataCategories();
 
   return (
@@ -60,30 +71,18 @@ const Menu = async () => {
       <h2 className="text-sm mt-12">{"Chosen by the editor"}</h2>
       <h1 className="text-xl font-bold mb-6 w-full">Editor Pick </h1>
 
-      <CartItem
-        author="jhon doe"
-        category="travel"
-        date="01.13.2024"
-        title="Lorem ipsum dolor sit amet consectetur adipisicing elit."
+      {dataByEditorsChoice.posts.map((item: PostInterface) => (
+        <CartItem
+        key={item.id}
+        author={item.user?.name}
+        category={item.cat.title}
+        color={item.cat.color}
+        date={item.createdAt}
+        title={item.title}
         href="/"
         image="/coding.png"
-      />
-      <CartItem
-        author="jhon doe"
-        category="travel"
-        date="01.13.2024"
-        title="Lorem ipsum dolor sit amet consectetur adipisicing elit."
-        href="/"
-        image="/coding.png"
-      />
-      <CartItem
-        author="jhon doe"
-        category="travel"
-        date="01.13.2024"
-        title="Lorem ipsum dolor sit amet consectetur adipisicing elit."
-        href="/"
-        image="/coding.png"
-      />
+        />
+      )) }
     </div>
   );
 };
