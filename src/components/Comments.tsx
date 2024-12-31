@@ -7,6 +7,8 @@ import useSWR from "swr";
 import React, { useState } from "react";
 import { CommentInterface } from "@/utils/interface";
 
+import toast from "react-hot-toast";
+
 const fetcher = async (url: string) => {
   const res = await fetch(url);
   const data = await res.json();
@@ -17,7 +19,6 @@ const fetcher = async (url: string) => {
   return data;
 };
 
-import toast from "react-hot-toast";
 
 const Comments: React.FC<{
   postSlug: string;

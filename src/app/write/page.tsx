@@ -1,7 +1,9 @@
 "use client";
 import Layout from "@/components/Layout";
-import React, { useEffect, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
+
+import toast from "react-hot-toast";
 
 // Import ReactQuill secara dinamis tanpa SSR
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
@@ -9,22 +11,47 @@ import "react-quill/dist/quill.bubble.css";
 
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { CategoryInterface } from "@/utils/interface";
 
 const Write = () => {
   const { status } = useSession();
-
+  const [categories, setCategories] = useState<CategoryInterface[]>();
   const router = useRouter();
 
   const [file, setFile] = useState<File | null>(null);
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
-  const [desc, setDesc] = useState("")
+  const [desc, setDesc] = useState("");
+  const [content, setContent] = useState("");
+  const [catSlug, setCatSlug] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (status === "unauthenticated") {
       router.push("/");
     }
   }, [status, router]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch("http://localhost:3000/api/categories", {
+          cache: "no-store",
+        });
+        if (!res.ok) {
+          throw new Error("Failed to fetch categories");
+        }
+        const data = await res.json();
+        setCategories(data);
+      } catch (err) {
+        console.error(err);
+        toast.error("Failed to fetch categories!");
+      }
+    };
+    if (status === "authenticated") {
+      fetchCategories();
+    }
+  }, [status]);
 
   // Handle loading
   if (status === "loading") {
@@ -37,55 +64,93 @@ const Write = () => {
       const selectedFile = e.target.files[0];
       // Validasi ukuran file (contoh: maksimum 5MB)
       if (selectedFile.size > 5 * 1024 * 1024) {
-        alert("File size exceeds 5MB");
+        toast.error("File size exceeds 5MB");
         return;
       }
       setFile(selectedFile);
     }
   };
 
-  const handleSubmit = async () => {
-    if (!title || !desc) {
-      alert("Title and description are required!");
-      return;
-    }
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+
+    // if (!title || !content) {
+    //   toast.error("Title and content are required!");
+    //   return;
+    // }
 
     const formData = new FormData();
     formData.append("title", title);
     formData.append("desc", desc);
+    formData.append("catSlug", catSlug);
+    formData.append("content", content);
     if (file) {
       formData.append("file", file); // Pastikan `image` sesuai dengan key di API
     }
 
     try {
+      setIsLoading(true);
       const response = await fetch("http://localhost:3000/api/posts", {
         method: "POST",
         body: formData,
       });
 
       if (response.ok) {
-        alert("Post created successfully!");
+        toast.success("Post created successfully!");
       } else {
-        alert("Failed to create post!");
+        toast.error("Failed to create post!");
       }
     } catch (err) {
       console.error(err);
-      alert("Something went wrong!");
+      toast.error("Something went wrong!");
+    } finally {
+      setIsLoading(false);
+      setFile(null);
+      setTitle("");
+      setDesc("");
+      setContent("");
+      setCatSlug("");
     }
   };
 
   return (
     <Layout>
-      <div>
+      <form onSubmit={handleSubmit} >
         <input
           type="text"
           className="text-xl md:text-4xl font-semibold outline-none border-b mb-6 w-full bg-transparent"
+        
           placeholder="Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
+        <div className="flex flex-col sm:flex-row gap-6 mb-6">
+          <input
+            type="text"
+            required
+            placeholder="Type Description Here"
+            className="input input-bordered w-full max-w-full "
+            value={desc}
+            onChange={(e) => setDesc(e.target.value)}
+          />
+          <select 
+          className="select select-bordered w-full max-w-full sm:max-w-60" 
+          required
+          value={catSlug}
+          onChange={(e) => setCatSlug(e.target.value)}
+          >
+            <option disabled selected value={""}>
+              Select category
+            </option>
+            {categories?.map((item) => (
+              <option  key={item.id} value={item.slug}>{item.title}</option>
+            ))}
+            
+          </select>
+        </div>
         <div className="relative">
-          <button
+          <div
+            className="cursor-pointer inline-block"
             onClick={() => {
               setOpen(!open);
             }}
@@ -107,7 +172,7 @@ const Write = () => {
                 d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
               />
             </svg>
-          </button>
+          </div>
           {open && (
             <div className="absolute top-0 left-11 flex gap-2">
               <input
@@ -116,7 +181,7 @@ const Write = () => {
                 onChange={handleFileChange}
                 className="hidden"
               />
-              <button>
+              <div className="cursor-pointer">
                 <label htmlFor="image" className="cursor-pointer">
                   <svg
                     className="w-[30px] h-[30px] text-green-500"
@@ -136,8 +201,8 @@ const Write = () => {
                     />
                   </svg>
                 </label>
-              </button>
-              <button>
+              </div>
+              <div className="cursor-pointer">
                 <svg
                   className="w-[30px] h-[30px] text-green-500"
                   aria-hidden="true"
@@ -155,19 +220,29 @@ const Write = () => {
                     d="M14 6H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1Zm7 11-6-2V9l6-2v10Z"
                   />
                 </svg>
-              </button>
+              </div>
             </div>
           )}
           <ReactQuill
             className="border rounded-lg min-h-60 lg:min-h-20 mb-6"
-            value={desc}
-            onChange={setDesc}
+            value={content}
+            onChange={setContent}
             theme="bubble"
             placeholder="Tell your story..."
           />
-          <button onClick={handleSubmit} className="btn btn-accent">Publich</button>
+
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="btn btn-primary"
+          >
+            {!isLoading ? "Publish" : "Publishing"}
+            {isLoading && (
+              <span className="loading loading-dots loading-xs"></span>
+            )}
+          </button>
         </div>
-      </div>
+      </form>
     </Layout>
   );
 };

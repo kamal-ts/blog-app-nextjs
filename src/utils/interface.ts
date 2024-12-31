@@ -6,6 +6,7 @@ export interface PostInterface {
   slug: string;
   img: string;
   desc: string;
+  content: string;
   views: number;
   catSlug: string;
   cat: CategoryInterface;
@@ -37,4 +38,10 @@ export interface CommentInterface {
     name: string;
     image: string;
   };
+}
+
+export interface SearchParams {
+  page: number;
+  category: string;
+  limit?: number;
 }

@@ -1,13 +1,8 @@
-import { PostInterface } from "@/utils/interface";
+import { PostInterface, SearchParams } from "@/utils/interface";
 import Pagination from "./Pagination";
 import Image from "next/image";
 import Link from "next/link";
 
-interface SearchParams {
-  page: number;
-  category: string;
-  limit?: number;
-}
 const getData = async ({ page, limit, category }: SearchParams) => {
   const res = await fetch(
     `http://localhost:3000/api/posts?page=${page}&limit=${limit}&category=${category}`,
@@ -18,6 +13,7 @@ const getData = async ({ page, limit, category }: SearchParams) => {
   }
   return res.json();
 };
+
 const CardList: React.FC<SearchParams> = async ({ page, category }) => {
   const limit = 4;
   const { posts, count } = await getData({ page, limit, category });

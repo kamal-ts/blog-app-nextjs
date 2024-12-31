@@ -19,13 +19,13 @@ const AboutPage = () => {
 
           <div className="card-body flex-[1] gap-4 border-2 border-yellow-200 p-10 text-yellow-500">
             <h1 className="card-title text-4xl">Not Just My Blog</h1>
-            <p>
+            <p className="text-base-content">
               I believe the best ideas often come from conversations and
               collaboration. That’s why this blog is also open to you! If you
               have ideas, experiences, or insights to share, feel free to
               contribute here.
             </p>
-            <p>Welcome to the blog, and let’s grow together!</p>
+            <p className="text-base-content ">Welcome to the blog, and let’s grow together!</p>
           </div>
        
         </div>
