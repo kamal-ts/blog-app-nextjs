@@ -74,11 +74,6 @@ const Write = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    // if (!title || !content) {
-    //   toast.error("Title and content are required!");
-    //   return;
-    // }
-
     const formData = new FormData();
     formData.append("title", title);
     formData.append("desc", desc);
@@ -97,19 +92,25 @@ const Write = () => {
 
       if (response.ok) {
         toast.success("Post created successfully!");
+        setFile(null);
+        setTitle("");
+        setDesc("");
+        setContent("");
+        setCatSlug("");
       } else {
-        toast.error("Failed to create post!");
+        if (response.status === 400) {
+          const errorData = await response.json();
+          console.log('errorData', errorData)
+          toast.error(errorData.error);
+        }else {
+          toast.error("Failed to create post!");
+        }
       }
     } catch (err) {
       console.error(err);
       toast.error("Something went wrong!");
     } finally {
       setIsLoading(false);
-      setFile(null);
-      setTitle("");
-      setDesc("");
-      setContent("");
-      setCatSlug("");
     }
   };
 

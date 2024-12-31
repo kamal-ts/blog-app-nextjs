@@ -60,7 +60,7 @@ const CardList: React.FC<SearchParams> = async ({ page, category }) => {
               <Link href={`/posts/${item.slug}`} className="card-title">
                 {item.title}
               </Link>
-              <p>{item.desc.substring(0, 60)}</p>
+              <p>{item.desc}</p>
               <div className="card-actions justify-end">
                 <Link href={`/posts/${item.slug}`} className="link">
                   Read More

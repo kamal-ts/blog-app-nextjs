@@ -104,6 +104,7 @@ import { v2 as cloudinary } from "cloudinary";
 import { getAuthSession } from "@/utils/auth";
 
 import slugify from "slugify";
+import { postSchema } from "@/utils/validator";
 
 // Konfigurasi Cloudinary
 cloudinary.config({
@@ -135,25 +136,36 @@ export const POST = async (request: Request) => {
     // Mendapatkan data dari FormData
     const formData = await request.formData();
     const file = formData.get("file") as File;
-    const title = formData.get("title");
-    const desc = formData.get("desc");
-    const content = formData.get("content");
-    const catSlug = formData.get("catSlug");
-
-    console.table({ title, desc });
+    const title = formData.get("title")?.toString() || "";
+    const desc = formData.get("desc")?.toString() || "";
+    const content = formData.get("content")?.toString() || "";
+    const catSlug = formData.get("catSlug")?.toString() || "";
+    // const title = formData.get("title");
+    // const desc = formData.get("desc");
+    // const content = formData.get("content");
+    // const catSlug = formData.get("catSlug");
 
     // Menangani nilai null atau non-string pada title dan desc
-    if (typeof title !== "string" || typeof desc !== "string" || typeof content !== "string" || typeof catSlug !== "string") {
-      return NextResponse.json(
-        { error: "Title, desc, content and catSlug must be strings" },
-        { status: 400 }
-      );
-    }
+    // if (typeof title !== "string" || typeof desc !== "string" || typeof content !== "string" || typeof catSlug !== "string") {
+    //   return NextResponse.json(
+    //     { error: "Title, desc, content and catSlug must be strings" },
+    //     { status: 400 }
+    //   );
+    // }
 
     // if (!file) {
     //   return NextResponse.json({ error: "File is required" }, { status: 400 });
     // }
 
+    // Validasi data menggunakan Joi
+    const validationResult = postSchema.validate({ title, desc, content, catSlug });
+    if (validationResult.error) {
+      return NextResponse.json(
+        { error: validationResult.error.details[0].message },
+        { status: 400 }
+      );
+    }
+    
     let image: string | null = null;
     if (file) {
       // Upload ke Cloudinary menggunakan buffer
