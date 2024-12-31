@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import toast from "react-hot-toast";
 import useSWR from "swr";
 
@@ -16,11 +16,6 @@ interface SearchParams {
 
 interface HomeProps {
   searchParams: SearchParams;
-}
-
-interface SearchParamsWithEmail {
-  page?: number;
-  userEmail?: string | null;
 }
 
 const fetcher = async (url: string) => {
@@ -38,43 +33,16 @@ const MyBlog: React.FC<HomeProps> = ({ searchParams }) => {
   const { data, status } = useSession();
   const userEmail = data?.user?.email;
   const page = parseInt(searchParams.page || "1", 10);
-//   const [posts, setPosts] = useState<PostInterface[]>([]);
-//   const [isLoading, setIsLoading] = useState(false);
-const { data : posts, mutate, isLoading, error } = useSWR(
+  const { data : posts, mutate, isLoading } = useSWR(
     `http://localhost:3000/api/posts?page=${page}&limit=4&userEmail=${userEmail}`,
     fetcher
   );
+  
   useEffect(() => {
     if (status === "unauthenticated") {
       router.push("/");
     }
   }, [status, router]);
-
-//   useEffect(() => {
-//     const fetchPost = async ({ page, userEmail }: SearchParamsWithEmail) => {
-//       try {
-//         setIsLoading(true);
-//         const res = await fetch(
-//           `http://localhost:3000/api/posts?page=${page}&limit=4&userEmail=${userEmail}`,
-//           { cache: "no-store" }
-//         );
-//         if (!res.ok) {
-//           throw new Error("Failed");
-//         }
-//         const { posts } = await res.json();
-//         setPosts(posts);
-//       } catch (error) {
-//         console.error(error);
-//         toast.error("Failed to fetch Posts!");
-//       } finally {
-//         setIsLoading(false);
-//       }
-//     };
-
-//     if (status === "authenticated") {
-//       fetchPost({ page, userEmail });
-//     }
-//   }, [page, status, userEmail]);
 
   const deletePost = async (slug: string) => {
     try {
@@ -96,8 +64,8 @@ const { data : posts, mutate, isLoading, error } = useSWR(
             <tr>
               <th>#</th>
               <th>Image</th>
-              <th>Title</th>
               <th>Category</th>
+              <th>Title</th>
               <th>Created at</th>
               <th>action</th>
             </tr>

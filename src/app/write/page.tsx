@@ -120,7 +120,7 @@ const Write = () => {
         <input
           type="text"
           className="text-xl md:text-4xl font-semibold outline-none border-b mb-6 w-full bg-transparent"
-        
+          required
           placeholder="Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}

@@ -119,6 +119,23 @@ export const config = {
   },
 };
 
+
+const uniqueSlug =  async (title: string) => {
+      // Generate slug
+      const slug = slugify(title, { lower: true });
+
+      // Pastikan slug unik
+      let uniqueSlug = slug;
+      let count = 1;
+  
+      while (await prisma.post.findUnique({ where: { slug: uniqueSlug } })) {
+        uniqueSlug = `${slug}-${count}`;
+        count++;
+      }
+  
+      return uniqueSlug;
+}
+
 /**
  * POST Data
  */
@@ -140,22 +157,6 @@ export const POST = async (request: Request) => {
     const desc = formData.get("desc")?.toString() || "";
     const content = formData.get("content")?.toString() || "";
     const catSlug = formData.get("catSlug")?.toString() || "";
-    // const title = formData.get("title");
-    // const desc = formData.get("desc");
-    // const content = formData.get("content");
-    // const catSlug = formData.get("catSlug");
-
-    // Menangani nilai null atau non-string pada title dan desc
-    // if (typeof title !== "string" || typeof desc !== "string" || typeof content !== "string" || typeof catSlug !== "string") {
-    //   return NextResponse.json(
-    //     { error: "Title, desc, content and catSlug must be strings" },
-    //     { status: 400 }
-    //   );
-    // }
-
-    // if (!file) {
-    //   return NextResponse.json({ error: "File is required" }, { status: 400 });
-    // }
 
     // Validasi data menggunakan Joi
     const validationResult = postSchema.validate({ title, desc, content, catSlug });
@@ -165,6 +166,8 @@ export const POST = async (request: Request) => {
         { status: 400 }
       );
     }
+
+    const slug = await uniqueSlug(title);
     
     let image: string | null = null;
     if (file) {
@@ -197,7 +200,6 @@ export const POST = async (request: Request) => {
       image = (uploadResult as any).secure_url;
     }
 
-    const slug = slugify(title); // Buat slug dari judul
 
     // Kirim respons URL gambar
     const post = await prisma.post.create({
