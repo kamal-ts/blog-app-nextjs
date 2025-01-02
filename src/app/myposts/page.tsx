@@ -1,11 +1,12 @@
 "use client";
 import Layout from "@/components/Layout";
+import SmModal from "@/components/SmModal";
 import { PostInterface } from "@/utils/interface";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import useSWR from "swr";
 
@@ -19,25 +20,33 @@ interface HomeProps {
 }
 
 const fetcher = async (url: string) => {
-    const res = await fetch(url);
-    const data = await res.json();
-    if (!res.ok) {
-      throw new Error(data.message || "Failed to fetch data");
-    }
-  
-    return data.posts;
-  };
+  const res = await fetch(url);
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error(data.message || "Failed to fetch data");
+  }
+
+  return data.posts;
+};
 
 const MyBlog: React.FC<HomeProps> = ({ searchParams }) => {
   const router = useRouter();
   const { data, status } = useSession();
   const userEmail = data?.user?.email;
   const page = parseInt(searchParams.page || "1", 10);
-  const { data : posts, mutate, isLoading } = useSWR(
+  const {
+    data: posts,
+    mutate,
+    isLoading,
+  } = useSWR(
     `http://localhost:3000/api/posts?page=${page}&limit=4&userEmail=${userEmail}`,
     fetcher
   );
-  
+
+  const [isLoadingDelete, setIsLoadingDelete] = useState(false);
+  const [modalIsActive, setModalIsActive] = useState(false);
+  const [idPost, setIdPost] = useState("");
+
   useEffect(() => {
     if (status === "unauthenticated") {
       router.push("/");
@@ -46,14 +55,17 @@ const MyBlog: React.FC<HomeProps> = ({ searchParams }) => {
 
   const deletePost = async (slug: string) => {
     try {
-        await fetch(`/api/posts/${slug}`, {method: "DELETE"});
-        toast.success("Deleteing post was successfull");
-        mutate();
+      setIsLoadingDelete(true);
+      await fetch(`/api/posts/${slug}`, { method: "DELETE" });
+      toast.success("Deleteing post was successfull");
+      mutate();
     } catch (error) {
-        console.error(error);
-        toast.error("Failed to delete data!");
+      console.error(error);
+      toast.error("Failed to delete data!");
+    } finally {
+      setIsLoadingDelete(false);
     }
-  }
+  };
 
   return (
     <Layout>
@@ -111,10 +123,16 @@ const MyBlog: React.FC<HomeProps> = ({ searchParams }) => {
                     <Link href={`/posts/${item.slug}`} className="">
                       <EyeSvg />
                     </Link>
-                    <Link href={`/myposts/${item.slug}`} className="" >
+                    <Link href={`/myposts/${item.slug}`} className="">
                       <EditSvg />
                     </Link>
-                    <button className="" onClick={() => deletePost(item.slug)}>
+                    <button
+                      className=""
+                      onClick={() => {
+                        setIdPost(item.slug);
+                        setModalIsActive(true);
+                      }}
+                    >
                       <TrashSvg />
                     </button>
                   </td>
@@ -124,6 +142,37 @@ const MyBlog: React.FC<HomeProps> = ({ searchParams }) => {
           )}
         </table>
       </div>
+      <SmModal isAcctive={modalIsActive}>
+        <div className="max-w-xs w-full p-6 bg-base-100 dark:bg-smdark rounded-3xl flex flex-col gap-6">
+          <div className="flex flex-col items-center justify-center gap-2">
+            <h1 className="text-7xl text-red-500">
+              <Warning />
+            </h1>
+            <h1 className="text-xl font-semibold">Are You Sure ?</h1>
+            <p className="text-base">You are going to delete the project</p>
+          </div>
+          <div className="flex gap-4 mx-auto">
+            <button
+              className="btn"
+              onClick={() => setModalIsActive(!modalIsActive)}
+            >
+              Cencel
+            </button>
+            <button
+              className={`btn btn-error ${
+                isLoadingDelete ? "cursor-wait" : ""
+              }`}
+              onClick={async () => {
+                await deletePost(idPost);
+                setModalIsActive(!modalIsActive);
+              }}
+              disabled={isLoadingDelete}
+            >
+              {isLoadingDelete ? "Deleting..." : "Delete"}
+            </button>
+          </div>
+        </div>
+      </SmModal>
     </Layout>
   );
 };
@@ -192,6 +241,28 @@ const TrashSvg = () => {
         strokeLinejoin="round"
         strokeWidth="2"
         d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"
+      />
+    </svg>
+  );
+};
+
+const Warning = () => {
+  return (
+    <svg
+      className="w-20 h-20 text-error dark:text-white"
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <path
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        d="M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
       />
     </svg>
   );

@@ -24,7 +24,7 @@ const CategoryList = async () => {
         {data?.map((item: CategoryInterface) => (
           <Link
             href={`/blog?cat=${item.slug}`}
-            className={` btn`}
+            className={`motion-preset-expand btn`}
             key={item.id}
           >
             <div className="w-8 h-8 relative">

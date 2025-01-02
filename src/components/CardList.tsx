@@ -33,7 +33,7 @@ const CardList: React.FC<SearchParams> = async ({ page, category }) => {
         {posts.map((item: PostInterface) => (
           <div
             key={item.id}
-            className="card sm:card-side bg-base-100 shadow-md"
+            className="card sm:card-side bg-base-100 shadow-md motion-preset-slide-right "
           >
             {item.img && (
               <figure className="min-h-60 relative flex-[1]">

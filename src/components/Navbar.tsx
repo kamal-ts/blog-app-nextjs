@@ -33,11 +33,11 @@ const Navbar = () => {
               <Link href={"/"}>Homepage</Link>
             </li>
             <li>
-              <a>Contact</a>
+              <Link href={"/contact"}>Contact</Link>
             </li>
-            <li>
+            {/* <li>
               <Link href={"/corner"}>Corner</Link>
-            </li>
+            </li> */}
             <li>
               <Link href={"/about"}>About</Link>
             </li>
@@ -61,11 +61,11 @@ const Navbar = () => {
             <Link href={"/"}>Homepage</Link>
           </li>
           <li>
-            <a>Contact</a>
+            <Link href={"/contact"}>Contact</Link>
           </li>
-          <li>
+          {/* <li>
             <Link href={"/corner"}>Corner</Link>
-          </li>
+          </li> */}
           <li>
             <Link href={"/about"}>About</Link>
           </li>

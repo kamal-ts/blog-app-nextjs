@@ -23,6 +23,8 @@ const config: Config = {
   plugins: [
     daisyui,
     typography,
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    require('tailwindcss-motion'), 
   ],
   daisyui: {
     themes: ["light", "dark", "cmyk", "winter", "lemonade", "coffee", "retro", "lofi"],
