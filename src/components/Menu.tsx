@@ -4,7 +4,7 @@ import { CategoryInterface, PostInterface } from "@/utils/interface";
 import React from "react";
 
 const getData = async () => {
-  const res = await fetch(`http://localhost:3000/api/posts?hot=true`, {
+  const res = await fetch(`http://localhost:3000/api/posts?views=true&limit=5`, {
     cache: "no-store",
   });
   if (!res.ok) {
@@ -14,7 +14,7 @@ const getData = async () => {
 };
 
 const getDataByEditorsChoice = async () => {
-  const res = await fetch(`http://localhost:3000/api/posts?isEditorsChoice=true`, {
+  const res = await fetch(`http://localhost:3000/api/posts?editorsChoice=true&limit=5`, {
     cache: "no-store",
   });
   if (!res.ok) {

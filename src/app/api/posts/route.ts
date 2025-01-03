@@ -4,91 +4,49 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (req: NextRequest) => {
   const { searchParams } = new URL(req.url);
-  
+
   const title = searchParams.get("title") || ""; // Pencarian berdasarkan title
   const category = searchParams.get("category") || ""; // Pencarian berdasarkan category
-  const hot = searchParams.get("hot") === "true";
-  const isEditorsChoice = searchParams.get("isEditorsChoice") === "true";
+  const views = searchParams.get("views") || "";
+  const editorsChoice = searchParams.get("editorsChoice") || "";
   const userEmail = searchParams.get("userEmail") || "";
-  
+
 
   const page = Math.max(parseInt(searchParams.get("page") || "1", 10), 1); // Minimum 1
   const limit = Math.max(parseInt(searchParams.get("limit") || "2", 10), 1); // Minimum 1
   const skip = (page - 1) * limit;
-  
+
 
 
   try {
-    let posts, count;
 
-    if (hot) {
-
-      posts = await prisma.post.findMany({
-        orderBy: {
-          views: "desc",
-        },
-        take: 5,
-        include: {
-          user: true,
-          cat: {
-            select: {
-              title: true,
-              color: true
-            }
+    const query = {
+      take: limit,
+      skip: skip,
+      where: {
+        ...(category && { catSlug: category }),
+        ...(title && { title }),
+        ...(userEmail && { userEmail }),
+        ...(editorsChoice === "true" && { isEditorsChoice: true }),
+      },
+      include: {
+        cat: {
+          select: {
+            title: true,
+            color: true
           }
         }
-      });
-      count = posts.length;
+      }
+    };
 
-    } else if (isEditorsChoice) {
-
-      posts = await prisma.post.findMany({
-        where: {
-          isEditorsChoice: true
-        },
-        take: 5,
-        include: {
-          user: true,
-          cat: {
-            select: {
-              title: true,
-              color: true
-            }
-          }
+    const [posts, count] = await prisma.$transaction([
+      prisma.post.findMany({
+        ...query, orderBy: {
+          ...(views === "true" ? { views: "desc" } : { createdAt: "desc" })
         }
-      });
-      count = posts.length;
-
-    } else {
-
-      const query = {
-        take: limit,
-        skip: skip,
-        where: {
-          ...(category && { catSlug: category }),
-          ...(title && { title }),
-          ...(userEmail && { userEmail }),
-        },
-        include: {
-          cat: {
-            select: {
-              title: true,
-              color: true
-            }
-          }
-        }
-      };
-
-      const [postsResult, countResult] = await prisma.$transaction([
-        prisma.post.findMany({...query, orderBy: {
-          createdAt: "desc"
-        }}),
-        prisma.post.count({ where: query.where }), // Filter untuk count
-      ]);
-      posts = postsResult;
-      count = countResult;
-
-    }
+      }),
+      prisma.post.count({ where: query.where }), // Filter untuk count
+    ]);
 
     return NextResponse.json({ posts, count }, { status: 200 });
   } catch (error) {
@@ -120,20 +78,20 @@ export const config = {
 };
 
 
-const uniqueSlug =  async (title: string) => {
-      // Generate slug
-      const slug = slugify(title, { lower: true });
+const uniqueSlug = async (title: string) => {
+  // Generate slug
+  const slug = slugify(title, { lower: true });
 
-      // Pastikan slug unik
-      let uniqueSlug = slug;
-      let count = 1;
-  
-      while (await prisma.post.findUnique({ where: { slug: uniqueSlug } })) {
-        uniqueSlug = `${slug}-${count}`;
-        count++;
-      }
-  
-      return uniqueSlug;
+  // Pastikan slug unik
+  let uniqueSlug = slug;
+  let count = 1;
+
+  while (await prisma.post.findUnique({ where: { slug: uniqueSlug } })) {
+    uniqueSlug = `${slug}-${count}`;
+    count++;
+  }
+
+  return uniqueSlug;
 }
 
 /**
@@ -168,7 +126,7 @@ export const POST = async (request: Request) => {
     }
 
     const slug = await uniqueSlug(title);
-    
+
     let image: string | null = null;
     if (file) {
       // Upload ke Cloudinary menggunakan buffer

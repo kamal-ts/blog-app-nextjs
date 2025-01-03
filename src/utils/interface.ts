@@ -12,6 +12,7 @@ export interface PostInterface {
   cat: CategoryInterface;
   userEmail: string;
   user?: UserInterface;
+  isEditorsChoice: boolean;
 
 }
 
@@ -44,4 +45,7 @@ export interface SearchParams {
   page: number;
   category: string;
   limit?: number;
+  editorsChoice?: boolean;
+  views?: boolean;
+  title?: string;
 }

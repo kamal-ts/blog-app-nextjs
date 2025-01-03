@@ -1,35 +1,41 @@
-import CardList from "@/components/CardList";
+import CardPost from "@/components/CardPost";
 import Footer from "@/components/Footer";
-import Menu from "@/components/Menu";
 import Navbar from "@/components/Navbar";
+import SearchFilter from "@/components/SearchFilter";
 
 interface SearchParams {
   page?: string;
-  cat: string;
+  cat?: string;
+  editorsChoice?: string;
+  views?: string;
+  title?: string;
 }
 
 interface HomeProps {
   searchParams: SearchParams;
 }
 
-const BlogPage : React.FC<HomeProps> = ({ searchParams }) => {
+const BlogPage: React.FC<HomeProps> = ({ searchParams }) => {
   const page = parseInt(searchParams.page || "1", 10);
   const cat = searchParams.cat || "";
-  console.table({cat})
+  const editorsChoice = searchParams.editorsChoice === "true";
+  const views = searchParams.views === "true";
+  const title = searchParams.title || "";
+
   return (
+
     <div>
       <Navbar />
       <div className="container mt-24">
-        {/* <div className="shadow-lg bg-base-200 py-2"> */}
-          <h1 className="font-bold uppercase text-center text-xl">
-            {cat} Blog
-          </h1>
-        {/* </div> */}
+        <div className="">
+            <SearchFilter cat={cat} choice={editorsChoice} view={views} title={title}  />
+        </div>
         <div className="md:flex md:gap-8">
-          <CardList page={page} category={cat} />
-          <Menu />
+          <CardPost page={page} category={cat} editorsChoice={editorsChoice} views={views} title={title}/>
         </div>
       </div>
+
+
       <Footer />
     </div>
   );
