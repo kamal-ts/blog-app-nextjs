@@ -1,5 +1,6 @@
 "use client";
 import Layout from "@/components/Layout";
+import Pagination from "@/components/Pagination";
 import SmModal from "@/components/SmModal";
 import { PostInterface } from "@/utils/interface";
 import { useSession } from "next-auth/react";
@@ -26,7 +27,7 @@ const fetcher = async (url: string) => {
     throw new Error(data.message || "Failed to fetch data");
   }
 
-  return data.posts;
+  return data;
 };
 
 const MyBlog: React.FC<HomeProps> = ({ searchParams }) => {
@@ -34,18 +35,24 @@ const MyBlog: React.FC<HomeProps> = ({ searchParams }) => {
   const { data, status } = useSession();
   const userEmail = data?.user?.email;
   const page = parseInt(searchParams.page || "1", 10);
+
+  const limit = 4;
+
   const {
-    data: posts,
+    data: dataPosts,
     mutate,
     isLoading,
   } = useSWR(
-    `http://localhost:3000/api/posts?page=${page}&limit=4&userEmail=${userEmail}`,
+    `http://localhost:3000/api/posts?page=${page}&limit=${limit}&userEmail=${userEmail}`,
     fetcher
   );
 
   const [isLoadingDelete, setIsLoadingDelete] = useState(false);
   const [modalIsActive, setModalIsActive] = useState(false);
   const [idPost, setIdPost] = useState("");
+
+  const hasNext = limit * page < dataPosts?.count;
+  const hasPrev = page > 1;
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -92,9 +99,9 @@ const MyBlog: React.FC<HomeProps> = ({ searchParams }) => {
             </tbody>
           ) : (
             <tbody>
-              {posts.map((item: PostInterface, index: number) => (
+              {dataPosts?.posts.map((item: PostInterface, index: number) => (
                 <tr key={item.id}>
-                  <th>{index + 1}</th>
+                  <th>{(page - 1) * limit + (index + 1)}</th>
                   <th className="text-center">
                     {item.img ? (
                       <figure className="min-h-10 relative flex-[1]">
@@ -141,7 +148,14 @@ const MyBlog: React.FC<HomeProps> = ({ searchParams }) => {
             </tbody>
           )}
         </table>
+        {!isLoading && (
+          <div className="flex gap-4 items-center">
+            <Pagination page={page} hasNext={hasNext} hasPrev={hasPrev} />
+          </div>
+        )}
       </div>
+
+      {/* Modal */}
       <SmModal isAcctive={modalIsActive}>
         <div className="max-w-xs w-full p-6 bg-base-100 dark:bg-smdark rounded-3xl flex flex-col gap-6">
           <div className="flex flex-col items-center justify-center gap-2">

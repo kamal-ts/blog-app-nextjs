@@ -16,14 +16,14 @@ const Pagination = ({ page, hasPrev, hasNext }: { page: number, hasPrev: boolean
     <div className="flex justify-between">
       <div className="join grid grid-cols-2">
         <button
-          className="join-item btn btn-outline"
+          className="join-item btn btn-sm btn-neutral"
           onClick={() => handlePageChange(page - 1)}
           disabled={!hasPrev}
         >
           Previous
         </button>
         <button
-          className="join-item btn btn-outline"
+          className="join-item btn btn-sm btn-neutral"
           onClick={() => handlePageChange(page + 1)}
           disabled={!hasNext}
         >
