@@ -16,12 +16,8 @@ const getData = async ({ page, limit, category, editorsChoice, views, title }: S
 
 const CardPost: React.FC<SearchParams> = async ({ page, category, editorsChoice, views, title }) => {
   const limit = 6;
-  // console.table({category, editorsChoice, views, title})
   const { posts, count } = await getData({ page, limit, category, editorsChoice, views, title });
-  console.table({ page, category, editorsChoice, views, title });
-  // const hasNext = (limit * (page - 1 ) + limit) < count;
-  // const hasPrev = (limit * (page - 1)) > 0;
-
+  
   const hasNext = limit * page < count;
   const hasPrev = page > 1;
 
