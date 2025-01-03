@@ -11,41 +11,53 @@ export const GET = async (req: NextRequest) => {
   const editorsChoice = searchParams.get("editorsChoice") || "";
   const userEmail = searchParams.get("userEmail") || "";
 
-
   const page = Math.max(parseInt(searchParams.get("page") || "1", 10), 1); // Minimum 1
   const limit = Math.max(parseInt(searchParams.get("limit") || "2", 10), 1); // Minimum 1
+  
   const skip = (page - 1) * limit;
-
-
 
   try {
 
-    const query = {
-      take: limit,
-      skip: skip,
-      where: {
-        ...(category && { catSlug: category }),
-        ...(title && { title }),
-        ...(userEmail && { userEmail }),
-        ...(editorsChoice === "true" && { isEditorsChoice: true }),
-      },
-      include: {
-        cat: {
-          select: {
-            title: true,
-            color: true
-          }
-        }
-      }
-    };
-
     const [posts, count] = await prisma.$transaction([
       prisma.post.findMany({
-        ...query, orderBy: {
+        take: limit,
+        skip: skip,
+        where: {
+          ...(category && { catSlug: category }),
+          ...(title && {
+            title: {
+              contains: title,
+              mode: 'insensitive',
+            }
+          }),
+          ...(userEmail && { userEmail }),
+          ...(editorsChoice === "true" && { isEditorsChoice: true }),
+        },
+        include: {
+          cat: {
+            select: {
+              title: true,
+              color: true
+            }
+          }
+        },
+        orderBy: {
           ...(views === "true" ? { views: "desc" } : { createdAt: "desc" })
         }
       }),
-      prisma.post.count({ where: query.where }), // Filter untuk count
+      prisma.post.count({
+        where: {
+          ...(category && { catSlug: category }),
+          ...(title && {
+            title: {
+              contains: title,
+              mode: 'insensitive',
+            }
+          }),
+          ...(userEmail && { userEmail }),
+          ...(editorsChoice === "true" && { isEditorsChoice: true }),
+        } 
+      }), // Filter untuk count
     ]);
 
     return NextResponse.json({ posts, count }, { status: 200 });
