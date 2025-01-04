@@ -70,24 +70,11 @@ export const GET = async (req: NextRequest) => {
   }
 };
 
-import { v2 as cloudinary } from "cloudinary";
 import { getAuthSession } from "@/utils/auth";
 
 import slugify from "slugify";
 import { postSchema } from "@/utils/validator";
-
-// Konfigurasi Cloudinary
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME!,
-  api_key: process.env.CLOUDINARY_API_KEY!,
-  api_secret: process.env.CLOUDINARY_API_SECRET!,
-});
-
-export const config = {
-  api: {
-    bodyParser: false, // Perlu dinonaktifkan untuk menangani FormData
-  },
-};
+import cloudinary  from "@/utils/cloudinary";
 
 
 const uniqueSlug = async (title: string) => {
@@ -105,6 +92,12 @@ const uniqueSlug = async (title: string) => {
 
   return uniqueSlug;
 }
+
+export const config = {
+  api: {
+    bodyParser: false, // Perlu dinonaktifkan untuk menangani FormData
+  },
+};
 
 /**
  * POST Data
