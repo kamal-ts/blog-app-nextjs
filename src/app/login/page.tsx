@@ -1,6 +1,7 @@
 "use client"
 
 import Layout from '@/components/Layout'
+import Loading from '@/components/Loading';
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation';
 import toast from "react-hot-toast";
@@ -12,9 +13,7 @@ const Login = () => {
   const router = useRouter();
 
   if (status==="loading") {
-    return (
-      <div className='text-red-500'>Loading...</div>
-    )
+    return <Loading/>
   }
 
   if (status === "authenticated") {

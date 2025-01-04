@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import { CategoryInterface } from "@/utils/interface";
 import { ImageIcon, PlushRounded, VideoIcon } from "@/utils/icon";
 import Image from "next/image";
+import Loading from "@/components/Loading";
 
 const Write = () => {
   const { status } = useSession();
@@ -57,7 +58,7 @@ const Write = () => {
 
   // Handle loading
   if (status === "loading") {
-    return <div>Loading...</div>;
+    return <Loading/>;
   }
 
   // Handle perubahan file

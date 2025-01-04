@@ -13,6 +13,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { CategoryInterface, PostInterface } from "@/utils/interface";
 import Image from "next/image";
+import Loading from "@/components/Loading";
 
 interface Params {
   slug: string;
@@ -93,20 +94,14 @@ const UpdatePost: React.FC<{ params: Params }> = ({ params }) => {
   // Handle loading
   if (status === "loading") {
     return (
-      <div className="h-screen w-full font-bold flex flex-col justify-center items-center gap-4">
-        <span className="loading loading-spinner loading-lg "></span>
-        <span>Loading...</span>
-      </div>
+      <Loading/>
     );
   }
 
   if (isLoadingFetch) {
     return (
       <Layout>
-        <div className="h-screen w-full font-bold flex flex-col justify-center items-center gap-4">
-          <span className="loading loading-spinner loading-lg "></span>
-          <span>Loading...</span>
-        </div>
+        <Loading/>
       </Layout>
     );
   }

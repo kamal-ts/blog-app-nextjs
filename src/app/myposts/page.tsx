@@ -1,5 +1,6 @@
 "use client";
 import Layout from "@/components/Layout";
+import Loading from "@/components/Loading";
 import Pagination from "@/components/Pagination";
 import SmModal from "@/components/SmModal";
 import { PostInterface } from "@/utils/interface";
@@ -60,6 +61,10 @@ const MyBlog: React.FC<HomeProps> = ({ searchParams }) => {
     }
   }, [status, router]);
 
+  if (status === "loading") {
+    return <Loading/>
+  }
+
   const deletePost = async (slug: string) => {
     try {
       setIsLoadingDelete(true);
@@ -73,7 +78,6 @@ const MyBlog: React.FC<HomeProps> = ({ searchParams }) => {
       setIsLoadingDelete(false);
     }
   };
-
   return (
     <Layout>
       <div className="overflow-x-auto">
@@ -89,7 +93,7 @@ const MyBlog: React.FC<HomeProps> = ({ searchParams }) => {
               <th>action</th>
             </tr>
           </thead>
-          {isLoading ? (
+          {isLoading && (
             <tbody>
               <tr>
                 <td colSpan={6} className="text-center">
@@ -97,7 +101,28 @@ const MyBlog: React.FC<HomeProps> = ({ searchParams }) => {
                 </td>
               </tr>
             </tbody>
-          ) : (
+          ) || dataPosts.count === 0 && (
+            <tbody>
+              <tr>
+                <td colSpan={6} className="text-center ">
+                  <div role="alert" className="alert">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      className="stroke-info h-6 w-6 shrink-0">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span>Data is emphty.</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          ) || (
             <tbody>
               {dataPosts?.posts.map((item: PostInterface, index: number) => (
                 <tr key={item.id}>
