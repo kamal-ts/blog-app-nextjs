@@ -12,7 +12,7 @@ const SmModal: React.FC<{children: JSX.Element, isAcctive: boolean}> = ({childre
     }, [isAcctive])
     
   return (
-    <div className={`${isAcctive ? "": "hidden"} z-[9001] fixed h-screen w-full overflow-y-hidden top-0 left-0 flex flex-col justify-center items-center backdrop-blur-sm bg-black bg-opacity-50 `}>
+    <div className={`${isAcctive ? "": "hidden"} z-[9998] fixed h-screen w-full overflow-y-hidden top-0 left-0 flex flex-col justify-center items-center backdrop-blur-sm bg-black bg-opacity-50 `}>
         {children}
         {isAcctive}
     </div>

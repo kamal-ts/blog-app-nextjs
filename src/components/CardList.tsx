@@ -15,17 +15,13 @@ const getData = async ({ page, limit, category }: SearchParams) => {
 };
 
 const CardList: React.FC<SearchParams> = async ({ page, category }) => {
-  const limit = 4;
+  const limit = 5;
   const { posts, count } = await getData({ page, limit, category });
-  console.table({ page, category });
   // const hasNext = (limit * (page - 1 ) + limit) < count;
   // const hasPrev = (limit * (page - 1)) > 0;
 
   const hasNext = limit * page < count;
   const hasPrev = page > 1;
-
-  console.log("posts", posts);
-
   return (
     <div className="sm:flex-[5] mt-12">
       <h1 className="text-xl font-bold mb-6 w-full">Recent Posts </h1>

@@ -89,7 +89,7 @@ const SearchFilter: React.FC<Params> = ({ cat, choice, view, title }) => {
 
       {/* Put this part before </body> tag */}
       <input type="checkbox" id="my_modal_6" className="modal-toggle" />
-      <div className="modal" role="dialog">
+      <div className="modal z-[9999]" role="dialog">
         <div className="modal-box">
           <div className="flex gap-10">
             <div className="flex-1">

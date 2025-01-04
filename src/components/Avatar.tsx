@@ -5,7 +5,7 @@ import { useState } from "react";
 const Avatar: React.FC<{ src: string; alt: string }> = ({ src, alt }) => {
   const [image, setImage] = useState(src)
   return (
-    <div className="w-10 h-10 relative">
+    <div className="w-12 h-12 relative">
       <Image
         fill
         src={image}

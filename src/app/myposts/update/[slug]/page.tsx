@@ -93,15 +93,13 @@ const UpdatePost: React.FC<{ params: Params }> = ({ params }) => {
 
   // Handle loading
   if (status === "loading") {
-    return (
-      <Loading/>
-    );
+    return <Loading />;
   }
 
   if (isLoadingFetch) {
     return (
       <Layout>
-        <Loading/>
+        <Loading />
       </Layout>
     );
   }

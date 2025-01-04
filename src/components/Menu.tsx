@@ -50,7 +50,7 @@ const Menu = async () => {
           color={item.cat.color}
           date={item.createdAt}
           title={item.title}
-          href="/"
+          href={`/posts/${item.slug}`}
         />
       ))}
 
@@ -79,8 +79,8 @@ const Menu = async () => {
         color={item.cat.color}
         date={item.createdAt}
         title={item.title}
-        href="/"
-        image="/coding.png"
+        href={`/posts/${item.slug}`}
+        image={item.img}
         />
       )) }
     </div>

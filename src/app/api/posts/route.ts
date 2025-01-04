@@ -39,6 +39,11 @@ export const GET = async (req: NextRequest) => {
               title: true,
               color: true
             }
+          },
+          user: {
+            select: {
+              name: true
+            }
           }
         },
         orderBy: {
