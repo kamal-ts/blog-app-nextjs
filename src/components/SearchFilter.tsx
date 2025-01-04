@@ -79,10 +79,11 @@ const SearchFilter: React.FC<Params> = ({ cat, choice, view, title }) => {
           onChange={(e) => setTitleState(e.target.value)}
         />
         <button className="btn join-item" onClick={handlePageChange}>
-          Search
+          <Search />
         </button>
         <label htmlFor="my_modal_6" className="btn btn-neutral join-item">
-          Filter
+          Filters
+          <Filter />
         </label>
       </div>
 
@@ -92,7 +93,7 @@ const SearchFilter: React.FC<Params> = ({ cat, choice, view, title }) => {
         <div className="modal-box">
           <div className="flex gap-10">
             <div className="flex-1">
-              <h1 className="font-bold">CATEGORY</h1>
+              <h1 className="font-bold mb-4 underline">CATEGORY</h1>
 
               {categories.map((item: CategoryInterface) => (
                 <div className="form-control" key={item.id}>
@@ -114,7 +115,7 @@ const SearchFilter: React.FC<Params> = ({ cat, choice, view, title }) => {
             </div>
 
             <div className="flex-1">
-              <h1 className="font-bold">SORT BY</h1>
+              <h1 className="font-bold mb-4 underline">SORT BY</h1>
               <div className="form-control">
                 <label className="label cursor-pointer">
                   <span className="label-text">Editors Choice</span>
@@ -158,4 +159,40 @@ const SearchFilter: React.FC<Params> = ({ cat, choice, view, title }) => {
   );
 };
 
+const Filter = () => {
+  return (
+    <svg
+      className="w-6 h-6"
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      fill="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path d="M10.83 5a3.001 3.001 0 0 0-5.66 0H4a1 1 0 1 0 0 2h1.17a3.001 3.001 0 0 0 5.66 0H20a1 1 0 1 0 0-2h-9.17ZM4 11h9.17a3.001 3.001 0 0 1 5.66 0H20a1 1 0 1 1 0 2h-1.17a3.001 3.001 0 0 1-5.66 0H4a1 1 0 1 1 0-2Zm1.17 6H4a1 1 0 1 0 0 2h1.17a3.001 3.001 0 0 0 5.66 0H20a1 1 0 1 0 0-2h-9.17a3.001 3.001 0 0 0-5.66 0Z" />
+    </svg>
+  );
+};
+
+const Search = () => {
+  return (
+    <svg
+      className="w-6 h-6 text-gray-800 dark:text-white"
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <path
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeWidth="2"
+        d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"
+      />
+    </svg>
+  );
+};
 export default SearchFilter;

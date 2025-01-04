@@ -130,11 +130,10 @@ const MyBlog: React.FC<HomeProps> = ({ searchParams }) => {
                     <Link href={`/posts/${item.slug}`} className="">
                       <EyeSvg />
                     </Link>
-                    <Link href={`/myposts/${item.slug}`} className="">
+                    <Link href={`/myposts/update/${item.slug}`} className="">
                       <EditSvg />
                     </Link>
                     <button
-                      className=""
                       onClick={() => {
                         setIdPost(item.slug);
                         setModalIsActive(true);
@@ -149,7 +148,7 @@ const MyBlog: React.FC<HomeProps> = ({ searchParams }) => {
           )}
         </table>
         {!isLoading && (
-          <div className="flex gap-4 items-center">
+          <div className="mt-4">
             <Pagination page={page} hasNext={hasNext} hasPrev={hasPrev} />
           </div>
         )}

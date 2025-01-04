@@ -13,7 +13,7 @@ const Login = () => {
 
   if (status==="loading") {
     return (
-      <div>Loading...</div>
+      <div className='text-red-500'>Loading...</div>
     )
   }
 

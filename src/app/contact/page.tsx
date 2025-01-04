@@ -82,6 +82,7 @@ const Contact = () => {
               required 
             />
             <textarea
+              placeholder="message"
               className="textarea textarea-bordered"
               name="message"
               value={message}
