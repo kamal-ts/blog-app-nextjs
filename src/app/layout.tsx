@@ -15,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="font-sans">
+      <body className="font-serif">
         <AuthProvider>
           <div className="container max-w-6xl mx-auto px-4 sm:px-12">
             {children}

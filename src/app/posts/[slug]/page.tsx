@@ -45,7 +45,7 @@ const SinglePage: React.FC<{params: Params}> = async ({params}) => {
           <Link href={"/"} className="flex gap-6 items-center">
             <Avatar src={post.user.image ? post.user.image : "/avatar.png"} alt="coding" />
             <div className="flex flex-col">
-              <span className="text-sm font-bold">Joe Doe Jhonson</span>
+              <span className="text-sm font-bold">{post.user.name}</span>
               <span className="text-xs">{post.createdAt.substring(0,10)}</span>
             </div>
           </Link>

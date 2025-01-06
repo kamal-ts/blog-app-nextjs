@@ -16,8 +16,9 @@ const Featured = async () => {
 
   return (
     <div>
-      <h1 className="text-5xl lg:text-7xl "><span className="font-bold">Hey, Mr.Malo here!</span> Discover my stories and creative ideas.</h1>
-      <div className="md:flex items-center gap-10 mt-12 hidden">
+      <h1 className="text-5xl lg:text-7xl "><span className="font-bold">Your Destination </span>For Creativity, Knowledge, and Growth.</h1>
+      <h2 className="mt-4 mb-10 text-slate-500">Discover insights, tips, and trends to fuel your creativity and success.</h2>
+      <div className="md:flex items-center gap-10 hidden">
         <div className="flex-1 h-80 relative ">
           <Image src={post.img} fill alt={post.title} className="object-cover rounded-xl" />
         </div>

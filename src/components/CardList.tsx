@@ -53,10 +53,10 @@ const CardList: React.FC<SearchParams> = async ({ page, category }) => {
                   {item.cat.title}
                 </div>
               </div>
-              <Link href={`/posts/${item.slug}`} className="card-title">
+              <Link href={`/posts/${item.slug}`} className="card-title line-clamp-2">
                 {item.title}
               </Link>
-              <p>{item.desc}</p>
+              <p className="line-clamp-3 text-sm">{item.desc}</p>
               <div className="card-actions justify-end">
                 <Link href={`/posts/${item.slug}`} className="link">
                   Read More

@@ -98,12 +98,6 @@ const uniqueSlug = async (title: string) => {
   return uniqueSlug;
 }
 
-export const config = {
-  api: {
-    bodyParser: false, // Perlu dinonaktifkan untuk menangani FormData
-  },
-};
-
 /**
  * POST Data
  */
