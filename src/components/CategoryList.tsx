@@ -15,7 +15,6 @@ const getData = async () => {
 const CategoryList = async () => {
 
   const data = await getData();
-  console.log('baseUrl', baseUrl)
 
   return (
     <div className="mt-12">
