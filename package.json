@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prisma:deploy": "prisma migrate deploy",
+    "prisma:deploy": "echo 'No migration needed for MongoDB'",
     "postinstall": "prisma generate"
   },
   "dependencies": {
