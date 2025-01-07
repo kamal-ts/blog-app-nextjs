@@ -4,6 +4,7 @@ import Featured from "@/components/Featured";
 import Footer from "@/components/Footer";
 import Menu from "@/components/Menu";
 import Navbar from "@/components/Navbar";
+import { Metadata } from "next";
 
 interface SearchParams {
   page?: string;
@@ -12,6 +13,11 @@ interface SearchParams {
 interface HomeProps {
   searchParams: SearchParams;
 }
+
+export const metadata: Metadata = {
+  title: "Home | My Website",
+  description: "This is the home page of My Website.",
+};
 
 const Home: React.FC<HomeProps> = ({ searchParams }) => {
   const page = parseInt(searchParams.page || "1", 10);

@@ -2,6 +2,7 @@
 import { CategoryInterface } from "@/utils/interface";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 interface Params {
   cat: string;
@@ -27,14 +28,19 @@ const SearchFilter: React.FC<Params> = ({ cat, choice, view, title }) => {
     setTitleState(title);
 
     const getData = async () => {
-      const res = await fetch("http://localhost:3000/api/categories", {
-        cache: "no-store",
-      });
-      if (!res.ok) {
-        throw new Error("Failed");
-      }
-      setCategories(await res.json());
-    };
+      try {   
+        const res = await fetch("http://localhost:3000/api/categories", {
+          cache: "no-store",
+        });
+        if (!res.ok) {
+          throw new Error("Failed");
+        }
+        setCategories(await res.json());
+      } catch (error) {
+        console.error(error);
+        toast.error("Failed to fetch categories!");
+      };
+    }
 
     getData();
   }, [cat, choice, view, title]);

@@ -27,6 +27,23 @@ const getData = async (slug: string) => {
   }
 }
 
+// Tambahkan fungsi generateMetadata
+export async function generateMetadata({ params }: { params: Params }) {
+  const post = await getData(params.slug);
+
+  if (!post) {
+    return {
+      title: "Post Not Found",
+      description: "The requested post could not be found.",
+    };
+  }
+
+  return {
+    title: `${post.title} | My Blog`,
+    description: post.desc || "Read this amazing post on My Blog.",
+  };
+}
+
 const SinglePage: React.FC<{params: Params}> = async ({params}) => {
   const {slug} = params 
   const post = await getData(slug);

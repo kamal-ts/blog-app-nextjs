@@ -43,7 +43,7 @@ const Comments: React.FC<{
       return;
     }
     try {
-      await fetch("/api/comments", {
+      await fetch("http://localhost:3000/api/comments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ desc, postSlug }),

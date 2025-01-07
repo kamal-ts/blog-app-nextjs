@@ -2,6 +2,7 @@ import CardPost from "@/components/CardPost";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import SearchFilter from "@/components/SearchFilter";
+import { Metadata } from "next";
 
 interface SearchParams {
   page?: string;
@@ -14,6 +15,11 @@ interface SearchParams {
 interface HomeProps {
   searchParams: SearchParams;
 }
+
+export const metadata: Metadata = {
+  title: "Blog | My Website",
+  description: "This is the blog page of My Website.",
+};
 
 const BlogPage: React.FC<HomeProps> = ({ searchParams }) => {
   const page = parseInt(searchParams.page || "1", 10);

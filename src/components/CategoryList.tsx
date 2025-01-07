@@ -44,24 +44,3 @@ const CategoryList = async () => {
 };
 
 export default CategoryList;
-
-// const ListCategory: React.FC<{
-//   href: string;
-//   color?: string;
-//   title: string;
-//   image: string;
-// }> = ({ href, title, image }) => {
-//   return (
-//     <Link href={href} className={` btn`}>
-//       <div className="w-8 h-8 relative">
-//         <Image
-//           fill
-//           src={image}
-//           alt={title}
-//           className="rounded-full object-cover border-2 border-white"
-//         />
-//       </div>
-//       {title}
-//     </Link>
-//   );
-// };

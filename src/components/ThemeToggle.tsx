@@ -68,17 +68,3 @@ const ThemeToggle = () => {
 };
 
 export default ThemeToggle;
-
-
-
-        // return (
-        //   <div className=''>
-        //     <div
-        //     onClick={handleThemeChange}
-        //     className='bg-base-content flex justify-between items-center h-[22px] w-[42px] px-1 rounded-full relative cursor-pointer '>
-        //       <Image src="/moon.png" alt='moon' width={14} height={14} />
-        //       <div className={`bg-primary-content rounded-full w-4 h-4 absolute left-[3] ${theme === "dark" ? "translate-x-5" : ""}  transition-all duration-300 `}></div>
-        //       <Image src="/sun.png" alt='sun' width={14} height={14} />
-        //     </div>
-        //   </div>
-        // )

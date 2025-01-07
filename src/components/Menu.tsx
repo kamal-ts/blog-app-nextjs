@@ -3,54 +3,41 @@ import Avatar from "./Avatar";
 import { CategoryInterface, PostInterface } from "@/utils/interface";
 import React from "react";
 
-const getData = async () => {
-  const res = await fetch(`http://localhost:3000/api/posts?views=true&limit=5`, {
-    cache: "no-store",
-  });
-  if (!res.ok) {
-    throw new Error("Failed");
+const safeFetch = async (url: string) => {
+  try {
+    const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) throw new Error("Failed");
+    return await res.json();
+  } catch (error) {
+    console.error(`Error fetching ${url}:`, error);
+    return null;
   }
-  return res.json();
 };
 
-const getDataByEditorsChoice = async () => {
-  const res = await fetch(`http://localhost:3000/api/posts?editorsChoice=true&limit=5`, {
-    cache: "no-store",
-  });
-  if (!res.ok) {
-    throw new Error("Failed");
-  }
-  return res.json();
-}
-
-const getDataCategories = async () => {
-  const res = await fetch("http://localhost:3000/api/categories", {
-    cache: "no-store",
-  });
-  if (!res.ok) {
-    throw new Error("Failed");
-  }
-  return res.json();
-};
+const getData = () => safeFetch(`http://localhost:3000/api/posts?views=true&limit=5`);
+const getDataByEditorsChoice = () => safeFetch(`http://localhost:3000/api/posts?editorsChoice=true&limit=5`);
+const getDataCategories = () => safeFetch("http://localhost:3000/api/categories");
 
 const Menu = async () => {
-  const { posts } = await getData();
-  const dataByEditorsChoice = await getDataByEditorsChoice();
-  const categories = await getDataCategories();
+  const [popularPosts, editorsChoices, categories] = await Promise.all([
+    getData(),
+    getDataByEditorsChoice(),
+    getDataCategories(),
+  ]);
 
   return (
     <div className="flex-[2] mt-12">
       <h2 className="text-sm">{"What's hot"}</h2>
       <h1 className="text-xl font-bold mb-6 w-full">Most Popular</h1>
-      {posts.map((item: PostInterface) => (
+      {popularPosts.posts.map((item: PostInterface) => (
         <CartItem
           key={item.id}
-          author={item.user?.name}
-          category={item.cat.title}
-          color={item.cat.color}
-          date={item.createdAt}
-          title={item.title}
-          href={`/posts/${item.slug}`}
+          author={item.user?.name || "Unknown"}
+          category={item.cat?.title || "General"}
+          color={item.cat?.color || "#ccc"}
+          date={item.createdAt || new Date().toISOString()}
+          title={item.title || "Untitled"}
+          href={`/posts/${item.slug || ""}`}
         />
       ))}
 
@@ -71,18 +58,18 @@ const Menu = async () => {
       <h2 className="text-sm mt-12">{"Chosen by the editor"}</h2>
       <h1 className="text-xl font-bold mb-6 w-full">Editor Pick </h1>
 
-      {dataByEditorsChoice.posts.map((item: PostInterface) => (
+      {editorsChoices.posts.map((item: PostInterface) => (
         <CartItem
-        key={item.id}
-        author={item.user?.name}
-        category={item.cat.title}
-        color={item.cat.color}
-        date={item.createdAt}
-        title={item.title}
-        href={`/posts/${item.slug}`}
-        image={item.img}
+          key={item.id}
+          author={item.user?.name || "Unknown"}
+          category={item.cat?.title || "General"}
+          color={item.cat?.color || "#ccc"}
+          date={item.createdAt || new Date().toISOString()}
+          title={item.title || "Untitled"}
+          href={`/posts/${item.slug || ""}`}
+          image={item.img}
         />
-      )) }
+      ))}
     </div>
   );
 };
@@ -96,7 +83,7 @@ const PopularCategory: React.FC<{
 }> = ({ color, title, href }) => {
   return (
     <Link
-    href={`/blog?cat=${href}`}
+      href={`/blog?cat=${href}`}
       style={{ backgroundColor: color }}
       className={`py-2 px-5 rounded-lg text-xs text-slate-700 hover:brightness-95 transition-all capitalize`}
     >
@@ -127,9 +114,7 @@ const CartItem: React.FC<{
         >
           {category}
         </div>
-        <p className="text-sm">
-          {title}
-        </p>
+        <p className="text-sm">{title}</p>
         <span className="capitalize text-[10px] text-primary">{author}</span>
         <span className="text-[10px] font-light">
           {" "}
