@@ -40,6 +40,9 @@ export const POST = async (req: NextRequest) => {
 
     try {
         const body = await req.json()
+        if (body.postSlug) {
+            body.postSlug = decodeURIComponent(body.postSlug);
+        }
         const comment = await prisma.comment.create({
             data: {
                 ...body,

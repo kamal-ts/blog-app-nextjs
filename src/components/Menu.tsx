@@ -2,6 +2,7 @@ import Link from "next/link";
 import Avatar from "./Avatar";
 import { CategoryInterface, PostInterface } from "@/utils/interface";
 import React from "react";
+import baseUrl from "@/utils/baseUrl";
 
 const safeFetch = async (url: string) => {
   try {
@@ -14,9 +15,9 @@ const safeFetch = async (url: string) => {
   }
 };
 
-const getData = () => safeFetch(`http://localhost:3000/api/posts?views=true&limit=5`);
-const getDataByEditorsChoice = () => safeFetch(`http://localhost:3000/api/posts?editorsChoice=true&limit=5`);
-const getDataCategories = () => safeFetch("http://localhost:3000/api/categories");
+const getData = () => safeFetch(`${baseUrl}/api/posts?views=true&limit=5`);
+const getDataByEditorsChoice = () => safeFetch(`${baseUrl}/api/posts?editorsChoice=true&limit=5`);
+const getDataCategories = () => safeFetch(`${baseUrl}/api/categories`);
 
 const Menu = async () => {
   const [popularPosts, editorsChoices, categories] = await Promise.all([

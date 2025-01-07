@@ -25,7 +25,7 @@ const Comments: React.FC<{
 }> = ({ postSlug }) => {
   const { status } = useSession();
   const { data, mutate, isLoading, error } = useSWR(
-    `http://localhost:3000/api/comments?postSlug=${postSlug}`,
+    `/api/comments?postSlug=${postSlug}`,
     fetcher
   );
 
@@ -43,7 +43,7 @@ const Comments: React.FC<{
       return;
     }
     try {
-      await fetch("http://localhost:3000/api/comments", {
+      await fetch("/api/comments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ desc, postSlug }),

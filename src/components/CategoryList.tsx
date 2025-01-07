@@ -2,9 +2,10 @@
 import { CategoryInterface } from "@/utils/interface";
 import Image from "next/image";
 import Link from "next/link";
+import baseUrl from "@/utils/baseUrl";
 
 const getData = async () => {
-  const res = await fetch("http://localhost:3000/api/categories", {cache: "no-store"});
+  const res = await fetch(`${baseUrl}/api/categories`, {cache: "no-store"});
   if (!res.ok) {
     throw new Error("Failed");
   }
@@ -14,7 +15,7 @@ const getData = async () => {
 const CategoryList = async () => {
 
   const data = await getData();
-  
+  console.log('baseUrl', baseUrl)
 
   return (
     <div className="mt-12">

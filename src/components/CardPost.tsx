@@ -2,10 +2,11 @@ import { PostInterface, SearchParams } from "@/utils/interface";
 import Pagination from "./Pagination";
 import Image from "next/image";
 import Link from "next/link";
+import baseUrl from "@/utils/baseUrl";
 
 const getData = async ({ page, limit, category, editorsChoice, views, title }: SearchParams) => {
   const res = await fetch(
-    `http://localhost:3000/api/posts?page=${page}&limit=${limit}&category=${category}&editorsChoice=${editorsChoice}&views=${views}&title=${title}`,
+    `${baseUrl}/api/posts?page=${page}&limit=${limit}&category=${category}&editorsChoice=${editorsChoice}&views=${views}&title=${title}`,
     { cache: "no-store" }
   );
   if (!res.ok) {

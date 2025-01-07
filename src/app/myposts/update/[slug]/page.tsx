@@ -46,7 +46,7 @@ const UpdatePost: React.FC<{ params: Params }> = ({ params }) => {
     const fetchCategories = async () => {
       try {
         setIsLoadingFetch(true);
-        const res = await fetch("http://localhost:3000/api/categories", {
+        const res = await fetch("/api/categories", {
           cache: "no-store",
         });
         if (!res.ok) {
@@ -64,7 +64,7 @@ const UpdatePost: React.FC<{ params: Params }> = ({ params }) => {
     const fetchPost = async () => {
       try {
         setIsLoadingFetch(true);
-        const res = await fetch(`http://localhost:3000/api/posts/${slug}`, {
+        const res = await fetch(`/api/posts/${slug}`, {
           cache: "no-store",
         });
         if (!res.ok) {
@@ -131,7 +131,7 @@ const UpdatePost: React.FC<{ params: Params }> = ({ params }) => {
 
     try {
       setIsLoading(true);
-      const response = await fetch(`http://localhost:3000/api/posts/${slug}`, {
+      const response = await fetch(`/api/posts/${slug}`, {
         method: "PATCH",
         body: formData,
       });

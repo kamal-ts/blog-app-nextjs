@@ -44,7 +44,7 @@ const MyBlog: React.FC<HomeProps> = ({ searchParams }) => {
     mutate,
     isLoading,
   } = useSWR(
-    `http://localhost:3000/api/posts?page=${page}&limit=${limit}&userEmail=${userEmail}`,
+    `/api/posts?page=${page}&limit=${limit}&userEmail=${userEmail}`,
     fetcher
   );
 

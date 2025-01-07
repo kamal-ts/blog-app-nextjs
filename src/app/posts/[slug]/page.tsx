@@ -2,11 +2,13 @@ import Avatar from "@/components/Avatar";
 import Comments from "@/components/Comments";
 import Layout from "@/components/Layout";
 import Menu from "@/components/Menu";
+import baseUrl from "@/utils/baseUrl";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import React from "react";
 import toast from "react-hot-toast";
+
 
 interface Params {
   slug: string;
@@ -15,7 +17,7 @@ interface Params {
 
 const getData = async (slug: string) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/posts/${slug}`, {cache: "no-store"});
+    const res = await fetch(`${baseUrl}/api/posts/${slug}`, {cache: "no-store"});
     if (!res.ok) {
       return null
     }

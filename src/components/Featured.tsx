@@ -1,11 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import WarningAlert from "./WarningAlert";
+import baseUrl from "@/utils/baseUrl";
 
 const fetchData = async () => {
   try {
     const res = await fetch(
-      "http://localhost:3000/api/posts?limit=1&views=true&isEditorsChoice"
+      `${baseUrl}/api/posts?limit=1&views=true&isEditorsChoice`
     );
     if (!res.ok) {
       throw new Error(`Failed to fetch: ${res.statusText}`);

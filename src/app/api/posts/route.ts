@@ -84,7 +84,7 @@ import cloudinary  from "@/utils/cloudinary";
 
 const uniqueSlug = async (title: string) => {
   // Generate slug
-  const slug = slugify(title, { lower: true });
+  const slug = slugify(title, { lower: true, strict: true });
 
   // Pastikan slug unik
   let uniqueSlug = slug;

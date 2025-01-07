@@ -38,7 +38,7 @@ const WritePost = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await fetch("http://localhost:3000/api/categories", {
+        const res = await fetch("/api/categories", {
           cache: "no-store",
         });
         if (!res.ok) {
@@ -88,7 +88,7 @@ const WritePost = () => {
 
     try {
       setIsLoading(true);
-      const response = await fetch("http://localhost:3000/api/posts", {
+      const response = await fetch("/api/posts", {
         method: "POST",
         body: formData,
       });
