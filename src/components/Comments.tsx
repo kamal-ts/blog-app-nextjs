@@ -111,7 +111,7 @@ const ListCommets: React.FC<{
 }> = ({ comment, date, image = "/avatar.png", username }) => {
   return (
     <div>
-      <Link href={"/"} className="flex gap-4 mb-6">
+      <div className="flex gap-4 mb-6">
         <div>
           <Avatar src={image} alt="username" />
         </div>
@@ -122,7 +122,7 @@ const ListCommets: React.FC<{
           </h1>
           <p className="text-sm">{comment}</p>
         </div>
-      </Link>
+      </div>
     </div>
   );
 };
