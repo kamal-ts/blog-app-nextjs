@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import prisma from "@/utils/connect";
 import { NextRequest, NextResponse } from "next/server";
+import { applyCors } from "@/lib/cors";
 
 export const GET = async (req: NextRequest) => {
   const { searchParams } = new URL(req.url);
@@ -65,13 +66,15 @@ export const GET = async (req: NextRequest) => {
       }), // Filter untuk count
     ]);
 
-    return NextResponse.json({ posts, count }, { status: 200 });
+    const response = NextResponse.json({ posts, count }, { status: 200 });
+    return applyCors(response);
   } catch (error) {
     console.log("error", error);
-    return NextResponse.json(
+    const response = NextResponse.json(
       { message: "Something went wrong!" },
       { status: 500 }
     );
+    return applyCors(response);
   }
 };
 

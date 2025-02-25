@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { applyCors } from "@/lib/cors";
 import { getAuthSession } from "@/utils/auth";
 import cloudinary from "@/utils/cloudinary";
 import prisma from "@/utils/connect";
@@ -20,13 +21,15 @@ export const GET = async (req: NextRequest, { params }: { params: { slug: string
                 }
             }
         });
-        return NextResponse.json(post, { status: 200 });
+        const response = NextResponse.json(post, { status: 200 });
+        return applyCors(response);
     } catch (error) {
         console.log("error", error);
-        return NextResponse.json(
+        const response = NextResponse.json(
             { message: "Something went wrong!" },
             { status: 500 }
         );
+        return applyCors(response);
     }
 };
 
