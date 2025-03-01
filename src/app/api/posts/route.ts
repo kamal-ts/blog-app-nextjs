@@ -17,6 +17,14 @@ export const GET = async (req: NextRequest) => {
   
   const skip = (page - 1) * limit;
 
+  const isOuthor = () => {
+      if (userEmail) {
+        return null
+      }else {
+        return {catSlug: {not: "project"}}
+      }
+  }
+
   try {
 
     const [posts, count] = await prisma.$transaction([
@@ -24,7 +32,7 @@ export const GET = async (req: NextRequest) => {
         take: limit,
         skip: skip,
         where: {
-          ...(category && { catSlug: category }),
+          ...(category ? {catSlug: category} : isOuthor()),
           ...(title && {
             title: {
               contains: title,

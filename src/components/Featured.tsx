@@ -6,7 +6,7 @@ import baseUrl from "@/utils/baseUrl";
 const fetchData = async () => {
   try {
     const res = await fetch(
-      `${baseUrl}/api/posts?limit=1&views=true&isEditorsChoice`
+      `${baseUrl}/api/posts?limit=1&views=true&isEditorsChoice`, { cache: "no-store" }
     );
     if (!res.ok) {
       throw new Error(`Failed to fetch: ${res.statusText}`);
