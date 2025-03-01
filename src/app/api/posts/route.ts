@@ -17,6 +17,7 @@ export const GET = async (req: NextRequest) => {
   
   const skip = (page - 1) * limit;
 
+  // check is there an outhor or not
   const isOuthor = () => {
       if (userEmail) {
         return null
