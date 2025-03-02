@@ -38,7 +38,7 @@ const WritePost = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await fetch("/api/categories", {
+        const res = await fetch("/api/categories?withProject=true", {
           cache: "no-store",
         });
         if (!res.ok) {

@@ -183,8 +183,8 @@ const MyBlog: React.FC<HomeProps> = ({ searchParams }) => {
       <SmModal isAcctive={modalIsActive}>
         <div className="max-w-xs w-full p-6 bg-base-100 dark:bg-smdark rounded-3xl flex flex-col gap-6">
           <div className="flex flex-col items-center justify-center gap-2">
-            <h1 className="text-7xl text-red-500">
-              <Warning />
+            <h1 className="text-7xl">
+              <Warning/>
             </h1>
             <h1 className="text-xl font-semibold">Are You Sure ?</h1>
             <p className="text-base">You are going to delete the project</p>
@@ -218,7 +218,7 @@ const MyBlog: React.FC<HomeProps> = ({ searchParams }) => {
 const EyeSvg = () => {
   return (
     <svg
-      className="w-6 h-6 text-primary dark:text-white"
+      className="w-6 h-6 text-primary"
       aria-hidden="true"
       xmlns="http://www.w3.org/2000/svg"
       width="24"
@@ -243,7 +243,7 @@ const EyeSvg = () => {
 const EditSvg = () => {
   return (
     <svg
-      className="w-6 h-6 text-accent dark:text-white"
+      className="w-6 h-6 text-accent"
       aria-hidden="true"
       xmlns="http://www.w3.org/2000/svg"
       width="24"
@@ -265,7 +265,7 @@ const EditSvg = () => {
 const TrashSvg = () => {
   return (
     <svg
-      className="w-6 h-6 text-error dark:text-white"
+      className="w-6 h-6 text-error"
       aria-hidden="true"
       xmlns="http://www.w3.org/2000/svg"
       width="24"
@@ -287,7 +287,7 @@ const TrashSvg = () => {
 const Warning = () => {
   return (
     <svg
-      className="w-20 h-20 text-error dark:text-white"
+      className="w-20 h-20 text-error"
       aria-hidden="true"
       xmlns="http://www.w3.org/2000/svg"
       width="24"

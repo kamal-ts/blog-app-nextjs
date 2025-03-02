@@ -1,10 +1,16 @@
 import prisma from "@/utils/connect";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export const GET = async () => {
+export const GET = async (req: NextRequest) => {
+  const { searchParams } = new URL(req.url);
+
+  const withProject = searchParams.get("withProject") || "";
+
   try {
     const categories = await prisma.category.findMany({
-      where: { slug: { not: "project" } },
+      where: {
+        ...(withProject !== "true" && { slug: { not: "project" } }),
+      },
     });
     return NextResponse.json(categories, { status: 200 });
   } catch (error) {
