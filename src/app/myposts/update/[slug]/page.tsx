@@ -46,7 +46,7 @@ const UpdatePost: React.FC<{ params: Params }> = ({ params }) => {
     const fetchCategories = async () => {
       try {
         setIsLoadingFetch(true);
-        const res = await fetch("/api/categories", {
+        const res = await fetch("/api/categories?withProject=true", {
           cache: "no-store",
         });
         if (!res.ok) {
