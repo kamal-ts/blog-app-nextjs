@@ -1,7 +1,7 @@
 "use client";
 import React, { FormEvent, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-
+import {modules} from '../lib/quilsModules'
 import toast from "react-hot-toast";
 
 // Import ReactQuill secara dinamis tanpa SSR
@@ -196,6 +196,7 @@ const WritePost = () => {
         onChange={setContent}
         theme="bubble"
         placeholder="Tell your story..."
+        modules={modules}
       />
 
       <button

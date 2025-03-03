@@ -2,7 +2,7 @@
 import Layout from "@/components/Layout";
 import React, { FormEvent, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-
+import {modules} from '@/lib/quilsModules'
 import toast from "react-hot-toast";
 
 // Import ReactQuill secara dinamis tanpa SSR
@@ -245,6 +245,7 @@ const UpdatePost: React.FC<{ params: Params }> = ({ params }) => {
             onChange={setContent}
             theme="bubble"
             placeholder="Tell your story..."
+            modules={modules}
           />
 
           <button
