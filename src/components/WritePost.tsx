@@ -91,6 +91,7 @@ const WritePost = () => {
       const response = await fetch("/api/posts", {
         method: "POST",
         body: formData,
+        cache: "no-store",
       });
 
       if (response.ok) {

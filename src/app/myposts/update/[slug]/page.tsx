@@ -134,6 +134,7 @@ const UpdatePost: React.FC<{ params: Params }> = ({ params }) => {
       const response = await fetch(`/api/posts/${slug}`, {
         method: "PATCH",
         body: formData,
+        cache: "no-store"
       });
 
       if (response.ok) {
