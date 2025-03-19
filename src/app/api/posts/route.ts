@@ -14,16 +14,16 @@ export const GET = async (req: NextRequest) => {
 
   const page = Math.max(parseInt(searchParams.get("page") || "1", 10), 1); // Minimum 1
   const limit = Math.max(parseInt(searchParams.get("limit") || "2", 10), 1); // Minimum 1
-  
+
   const skip = (page - 1) * limit;
 
   // check is there an outhor or not
   const isOuthor = () => {
-      if (userEmail) {
-        return null
-      }else {
-        return {catSlug: {not: "project"}}
-      }
+    if (userEmail) {
+      return null
+    } else {
+      return { catSlug: { not: "project" } }
+    }
   }
 
   try {
@@ -33,7 +33,7 @@ export const GET = async (req: NextRequest) => {
         take: limit,
         skip: skip,
         where: {
-          ...(category ? {catSlug: category} : isOuthor()),
+          ...(category ? { catSlug: category } : isOuthor()),
           ...(title && {
             title: {
               contains: title,
@@ -71,7 +71,7 @@ export const GET = async (req: NextRequest) => {
           }),
           ...(userEmail && { userEmail }),
           ...(editorsChoice === "true" && { isEditorsChoice: true }),
-        } 
+        }
       }), // Filter untuk count
     ]);
 
@@ -91,7 +91,7 @@ import { getAuthSession } from "@/utils/auth";
 
 import slugify from "slugify";
 import { postSchema } from "@/utils/validator";
-import cloudinary  from "@/utils/cloudinary";
+import { uploadImageToCloud, validationImage } from "@/utils/cloudinary";
 
 
 const uniqueSlug = async (title: string) => {
@@ -126,7 +126,7 @@ export const POST = async (request: Request) => {
   try {
     // Mendapatkan data dari FormData
     const formData = await request.formData();
-    const file = formData.get("file") as File;
+    const file = formData.get("file") as File || null;
     const title = formData.get("title")?.toString() || "";
     const desc = formData.get("desc")?.toString() || "";
     const content = formData.get("content")?.toString() || "";
@@ -143,37 +143,35 @@ export const POST = async (request: Request) => {
 
     const slug = await uniqueSlug(title);
 
-    let image: string | null = null;
+    let imageUrl = null;
+
+    // Upload gambar jika ada
     if (file) {
-      // Upload ke Cloudinary menggunakan buffer
-      const uploadResult = await new Promise((resolve, reject) => {
-        const stream = cloudinary.uploader.upload_stream(
-          { folder: "uploads" },
-          (error, result) => {
-            if (error) reject(error);
-            else resolve(result);
-          }
+      try {
+        // Validasi gambar
+        validationImage({
+          name: file.name,
+          size: file.size,
+          data: Buffer.from(await file.arrayBuffer()),
+        });
+
+        // Baca file sebagai buffer
+        const buffer = await file.arrayBuffer();
+        const base64 = Buffer.from(buffer).toString("base64");
+        const dataUrl = `data:${file.type};base64,${base64}`;
+
+        const image = await uploadImageToCloud(dataUrl);
+        if (image) {
+          imageUrl = image.secure_url;
+        }
+      } catch (error) {
+        console.error("Image upload error:", error);
+        return NextResponse.json(
+          { error: "Failed to upload image" },
+          { status: 500 }
         );
-
-        const reader = file.stream().getReader();
-        const pump = async ({
-          done,
-          value,
-        }: ReadableStreamReadResult<Uint8Array>) => {
-          if (done) {
-            stream.end();
-            return;
-          }
-          stream.write(Buffer.from(value));
-          reader.read().then(pump);
-        };
-
-        reader.read().then(pump);
-      });
-
-      image = (uploadResult as any).secure_url;
+      }
     }
-
 
     // Kirim respons URL gambar
     const post = await prisma.post.create({
@@ -184,7 +182,7 @@ export const POST = async (request: Request) => {
         desc: desc,
         content: content,
         userEmail: mySession.user.email,
-        ...(image && { img: image }),
+        ...(imageUrl && { img: imageUrl }),
       },
     });
 
